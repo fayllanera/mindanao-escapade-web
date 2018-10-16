@@ -42,7 +42,7 @@ def register():
 @server.route('/admin/landing', methods=['GET'])
 def landing_admin():
     if 'user' in session:
-        return render_template("empty.html")
+        return render_template("timeline.html")
     else:
         flash('You are not logged in! Please log in below!')
         return render_template('index.html')

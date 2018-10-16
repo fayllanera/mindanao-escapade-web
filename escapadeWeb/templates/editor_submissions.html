@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mindanao Escapade</title>
+        <script src="../static/js/jquery-3.3.1.min.js"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href='../static/vendor/fontawesome-free/css/fontawesome.css' rel='stylesheet' type='text/css'>
+    <link href='../static/vendor/fontawesome-free/css/fontawesome.min.css' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="../static/css/clean-blog.min.css" rel="stylesheet">
+    <link href="../static/plugin/fine-uploader/fine-uploader-gallery.min.css" rel="stylesheet">
+    <link href="../static/css/news.css" rel="stylesheet">
+    <script>
+       $(document).ready(function () {
+                $('#type').submit(function () {
+                    var type = $(".type-select option:selected").val();
+                    alert(type);
+                    localStorage.setItem('type_selected', type);
+                    if (type == 'Region'){
+                        window.location.href='/writer/region', true;
+                    } else if (type == 'Destination') {
+                        window.location.href='/writer/destination', true;
+                    } else {
+                        window.location.href='/writer/attraction', true;
+                    }
+                    return false;
+                });
+            })
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <!-- <a class="navbar-brand" href="index.html">Mindanao Escapade</a> -->
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" data-toggle="modal"
+               data-target="#squarespaceModal"  href="post.html">Write a Post</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/editor/submissions">Submissions</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">My Account</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="#">My Drafts</a>
+                  <a class="dropdown-item" href="/writer/submissions">My Submissions</a>
+                </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <header class="masthead" style="background-image: url('../static/img/home-bg.jpg'); background-position: center; background-repeat: no-repeat; height: 100%; padding: 35px; margin-bottom: -30%;" >
+      <div class="overlay"></div>
+      <div class="container" >
+        <div class="row">
+        </div>
+      </div>
+    </header>
+    <div class="signin-modal modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="section-heading">Select what to write</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">Close</span></button>
+                </div>
+
+                <div class="modal-body">
+                    <fieldset>
+                        <div class="row">
+                            <div class="col-sm-8 col-md-12  col-md-offset-12">
+                                <form id="type">
+                                    <div class="form-group">
+                                        <select tabindex="1" class="type-select form-control">
+                                          <option value="" selected disabled hidden>Choose here</option>
+                                          <option value="Region">Region</option>
+                                          <option value="Destination">Destination</option>
+                                          <option value="Attraction">Attraction</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-xl btn-primary btn-block">Next
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="padding:18%;">
+        <br>
+        <div style="padding:5%; background-color:#ebeced;">
+            <h2 style="margin-top:20%; margin-bottom:3em;">Submissions</h2>
+            <div class="container" style="min-height: 50vh;">
+                {% for submission in submissions %}
+                <form action="{{ url_for('editor_edit') }}" method="post">
+                    <input name="write" type="number" style="display:none;" value="{{ submission.write_id }}" readonly>
+                    <div class="col-lg-4 col-md-6 col-xs-12">
+                      <div class="headline-card tracked loaded" style="height: 420px;">
+                        <img class="image image-small" src="data:image;base64, {{ submission.photo }}" />
+                        <a class="gradient gradient-small" href="#" onclick="$(this).closest('form').submit()"></a>
+                        <div class="body" style="bottom:100px;">
+                          <h3>
+                            <a href="#" onclick="$(this).closest('form').submit()">{{ submission.name }}</a>
+                          </h3>
+                            <h3>by {{ submission.author_name }}</h3>
+                        </div>
+
+                        <div class="text-preview" style="bottom:35px;">
+                          {{ submission.content | safe }}
+                        </div>
+                      </div>
+                    </div>
+                </form>
+                {% else %}
+                    <h4 style="text-align: center;">There are no submissions posted.</h4>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <script src="../static/vendor/jquery/jquery.min.js"></script>
+    <script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom scripts for this template -->
+    <script src="../static/plugin/tinymce/js/tinymce/tinymce.min.js"></script>
+    <script src="../static/plugin/tinymce/js/tinymce/init-tinymce.js"></script>
+    <script src="../static/js/jquery-3.3.1.min.js"></script>
+    <script src="../static/js/getdata.js"></script>
+    <script src="../static/js/submit.js"></script>
+</body>
+</html>

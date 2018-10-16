@@ -47,11 +47,12 @@
                         if (resp.role_id == '2') {
                             alert('login success!');
                             console.log("success");
+                            localStorage.setItem('user', username);
                             localStorage.setItem('token', resp.token);
                             localStorage.setItem('role_id', resp.role_id);
                             localStorage.setItem('public_id', resp.public_id);
                             localStorage.setItem('auth_id', 'Basic ' + btoa(username + ':' + password));
-                            window.location.href = '/admin/landing';
+                            window.location.href = '/writer/region';
                         }
 
 

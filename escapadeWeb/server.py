@@ -27,11 +27,11 @@ def login():
 def logout():
     if session['user'] is None:
         session.pop('user', None)
-        return redirect('index')
+        return redirect('/')
     else:
         session.pop('user', None)
         print ('popped!')
-        return redirect('index')
+        return redirect('/')
 
 
 
@@ -45,7 +45,7 @@ def landing_admin():
         return render_template("timeline.html")
     else:
         flash('You are not logged in! Please log in below!')
-        return render_template('index.html')
+        return redirect('/')
 
 
 

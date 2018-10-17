@@ -6,7 +6,7 @@
 
 body {
   font-size: 20px;
-  color: #212529;
+  color: white;
   font-family: 'Lora', 'Times New Roman', serif;
 }
 
@@ -91,7 +91,7 @@ img::-moz-selection {
 #mainNav {
   position: absolute;
   border-bottom: 1px solid #e9ecef;
-  background-color: white;
+  background-color: black;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
@@ -101,19 +101,26 @@ img::-moz-selection {
 }
 
 #mainNav .navbar-toggler {
-  font-size: 12px;
+  font-size: 1px;
   font-weight: 800;
-  padding: 13px;
+  padding: 1px;
   text-transform: uppercase;
   color: #343a40;
 }
 
 #mainNav .navbar-nav > li.nav-item > a {
-  font-size: 12px;
+  font-size: 5px;
   font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
+
 }
+
+#mainNav .dropdown {
+    width: 55px;
+    text-indent: 5px;
+  }
+
 
 @media only screen and (min-width: 992px) {
   #mainNav {
@@ -121,14 +128,14 @@ img::-moz-selection {
     background: transparent;
   }
   #mainNav .navbar-brand {
-    padding: 10px 20px;
+    padding: 2px 2px;
     color: #fff;
   }
   #mainNav .navbar-brand:focus, #mainNav .navbar-brand:hover {
     color: rgba(255, 255, 255, 0.8);
   }
   #mainNav .navbar-nav > li.nav-item > a {
-    padding: 10px 20px;
+    padding: 2px 2px;
     color: #fff;
   }
   #mainNav .navbar-nav > li.nav-item > a:focus, #mainNav .navbar-nav > li.nav-item > a:hover {
@@ -177,7 +184,7 @@ img::-moz-selection {
 
 header.masthead {
   background: no-repeat center center;
-  background-color: #868e96;
+  background-color: white;
   /*background-attachment: scroll;*/
   position: relative;
   background-size: cover;
@@ -189,7 +196,7 @@ header.masthead .overlay {
   left: 0;
   height: 100%;
   width: 100%;
-  background-color: #212529;
+  background-color: white;
   opacity: 0.5;
 }
 

@@ -22,6 +22,7 @@
     <!-- Custom styles for this template -->
     <link href="../static/css/clean-blogT.css" rel="stylesheet">
     <link href="../static/plugin/fine-uploader/fine-uploader-gallery.min.css" rel="stylesheet">
+  <link href="../static/css/news.css" rel="stylesheet">
     <script>
        $(document).ready(function () {
                 $('#type').submit(function () {
@@ -116,7 +117,7 @@
             </dialog>
         </div>
     </script>
-      <style>
+    <style>
         .qq-gallery .qq-upload-button {
             background: #333;
             border: #333;
@@ -207,55 +208,40 @@
     <div style="padding:2% 5% 5% 5%;">
         <br>
         <div style="padding:5%; background-color:#ebeced;">
-            <h2>Write a Post</h2>
-            <select class="region form-control">
-              <option value="" selected disabled hidden>Choose here</option>
-              <option value="Zamboanga Peninsula">Zamboanga Peninsula</option>
-              <option value="Northern Mindanao">Northern Mindanao</option>
-              <option value="Davao Region">Davao Region</option>
-              <option value="SOCCSKSARGEN">SOCCSKSARGEN</option>
-              <option value="Caraga Region">Caraga Region</option>
-              <option value="ARMM">ARMM</option>
-            </select>
-            <textarea class="tinymce" id="texteditor"></textarea>
-            <div id="uploader"></div>
-            <input type="submit" class="btn" id="submit" value="Submit" style="margin-top:3em;">
-            <input type="submit" class="btn" id="draft" value="Save to Draft" style="margin-top:3em;">
-            <input type="submit" class="btn" id="cancel" value="Cancel" style="margin-top:3em;">
+            <h2>Drafts</h2>
+            <div class="container" style="min-height: 50vh;">
+                {% for submission in submissions %}
+                {% if submission.type == 'Region' %}
+                <form action="{{ url_for('edit_drafts') }}" method="post">
+                {% elif submission.type == 'Destination' %}
+                <form action="{{ url_for('edit_drafts_destination') }}" method="post">
+                {% else %}
+                <form action="{{ url_for('edit_drafts_attraction') }}" method="post">
+                {% endif %}
+                    <input name="write" type="number" style="display:none;" value="{{ submission.write_id }}" readonly>
+                    <div class="col-lg-3 col-md-3 col-xs-12" style="max-width:100%;">
+                      <div class="headline-card tracked loaded" style="height: 420px;">
+                        <img class="image image-small" src="data:image;base64, {{ submission.photo }}" />
+                        <a class="gradient gradient-small" href="#" onclick="$(this).closest('form').submit()"></a>
+                        <div class="body" style="bottom:100px;">
+                          <h3>
+                            <a href="#" onclick="$(this).closest('form').submit()">{{ submission.name }}</a>
+                          </h3>
+                            <h3>by {{ submission.author_name }}</h3>
+                        </div>
+
+                        <div class="text-preview" style="bottom:35px;">
+                          {{ submission.content | safe }}
+                        </div>
+                      </div>
+                    </div>
+                </form>
+                {% else %}
+                    <h4 style="text-align: center;">There are no submissions posted.</h4>
+                {% endfor %}
+            </div>
         </div>
     </div>
-    <div id="data-containter">
-
-    </div>
-        <script>
-        // Some options to pass to the uploader are discussed on the next page
-        var uploader = new qq.FineUploader({
-            element: document.getElementById("uploader"),
-            debug: true,
-            request: {
-                endpoint: '/upload'
-            },
-            deleteFile: {
-                enabled: true,
-                endpoint: '/delete'
-            },
-            retry: {
-               enableAuto: true
-            },
-            validation: {
-                itemLimit: 1,
-                allowedExtensions: ['jpeg', 'jpg', 'gif', 'png']
-            },
-            callbacks: {
-                onSubmit: function (id, fileName) {
-                    alert(fileName);
-                },
-                setName: function (id, name) {
-                    alert(name);
-                }
-            }
-            })
-    </script>
     <!-- Bootstrap core JavaScript -->
     <script src="../static/vendor/jquery/jquery.min.js"></script>
     <script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

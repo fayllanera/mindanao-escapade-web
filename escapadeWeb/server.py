@@ -10,6 +10,8 @@ server = Flask(__name__)
 
 @server.route('/', methods=['GET','POST'])
 def login():
+    submissions = requests.get('http://127.0.0.1:5000/get_posted')
+    dict = json.loads(submissions.text)
     if request.method == 'POST':
         print ('b')
         session.pop('user', None)
@@ -22,7 +24,7 @@ def login():
             print ('succ')
             return redirect('adminpage')
            
-    return render_template("index.html")
+    return render_template("index.html", posts=dict['submissions'])
 
 @server.route('/logout')
 def logout():
@@ -54,15 +56,23 @@ def write_region():
 
 @server.route('/writer/destination')
 def write_destination():
-    return render_template('write_destination.html')
+    regions = requests.get('http://127.0.0.1:5000/get_regions')
+    dict = json.loads(regions.text)
+    return render_template('write_destination.html', regions=dict['regions'])
 
 @server.route('/writer/attraction')
 def write_attraction():
-    return render_template('write_attraction.html')
+    regions = requests.get('http://127.0.0.1:5000/get_regions')
+    dict = json.loads(regions.text)
+    destinations = requests.get('http://127.0.0.1:5000/get_destinations')
+    dict2 = json.loads(destinations.text)
+    return render_template('write_attraction.html', regions=dict['regions'], destinations=dict2['destinations'])
 
 @server.route('/writer')
 def writer():
-    return render_template('writer.html')
+    submissions = requests.get('http://127.0.0.1:5000/get_posted')
+    dict = json.loads(submissions.text)
+    return render_template('writer.html', posts=dict['submissions'])
 
 @server.route('/writer/submissions')
 def submissions():
@@ -71,11 +81,50 @@ def submissions():
     dict = json.loads(submissions.text)
     return render_template('write_submission.html', submissions=dict['submissions'])
 
+@server.route('/writer/drafts')
+def drafts():
+    submissions = requests.get('http://127.0.0.1:5000/api/writer/drafts',
+                             json={"username": session['user']})
+    dict = json.loads(submissions.text)
+    print(dict)
+    return render_template('write_drafts.html', submissions=dict['drafts'])
+
+@server.route('/draft/edit', methods=['POST'])
+def edit_drafts():
+    write = request.form['write']
+    submission = requests.get('http://127.0.0.1:5000/api/writer/submission/edit',
+                               json={"username": session['user'], "write_id": write})
+    dict = json.loads(submission.text)
+    return render_template('edit_drafts.html', submission=dict['submission'][0])
+
+@server.route('/draft/edit-destination', methods=['POST'])
+def edit_drafts_destination():
+    write = request.form['write']
+    submission = requests.get('http://127.0.0.1:5000/api/writer/submission/edit-destination',
+                               json={"username": session['user'], "write_id": write})
+    dict = json.loads(submission.text)
+    regions = requests.get('http://127.0.0.1:5000/get_regions')
+    dict2 = json.loads(regions.text)
+    return render_template('edit_drafts_destination.html', submission=dict['submission'][0], regions=dict2['regions'])
+
+@server.route('/draft/edit-attraction', methods=['POST'])
+def edit_drafts_attraction():
+    write = request.form['write']
+    submission = requests.get('http://127.0.0.1:5000/api/writer/submission/edit-attraction',
+                               json={"username": session['user'], "write_id": write})
+    dict = json.loads(submission.text)
+    regions = requests.get('http://127.0.0.1:5000/get_regions')
+    dict2 = json.loads(regions.text)
+    destinations = requests.get('http://127.0.0.1:5000/get_destinations')
+    dict3 = json.loads(destinations.text)
+    return render_template('edit_drafts_attraction.html', submission=dict['submission'][0], regions=dict2['regions'], destinations=dict3['destinations'])
+
 @server.route('/editor/submissions')
 def editor_submissions():
     submissions = requests.get('http://127.0.0.1:5000/api/editor/submissions',
                              json={"username": session['user']})
     dict = json.loads(submissions.text)
+    print(dict)
     return render_template('editor_submissions.html', submissions=dict['submissions'])
 
 @server.route('/editor/edit', methods=['POST'])
@@ -87,16 +136,57 @@ def editor_edit():
     dict = json.loads(submission.text)
     return render_template('editor_view.html', submission=dict['submission'][0])
 
+@server.route('/editor/edit-destination', methods=['POST'])
+def editor_edit_destination():
+    write = request.form['write']
+    regions = requests.get('http://127.0.0.1:5000/get_regions')
+    dict2 = json.loads(regions.text)
+    submission = requests.get('http://127.0.0.1:5000/api/writer/submission/edit-destination',
+                               json={"username": session['user'], "write_id": write})
+    dict = json.loads(submission.text)
+    return render_template('editor_view_destination.html', submission=dict['submission'][0], regions=dict2['regions'])
+
+@server.route('/editor/edit-attraction', methods=['POST'])
+def editor_edit_attraction():
+    write = request.form['write']
+    print(write)
+    submission = requests.get('http://127.0.0.1:5000/api/writer/submission/edit-attraction',
+                               json={"username": session['user'], "write_id": write})
+    dict = json.loads(submission.text)
+    regions = requests.get('http://127.0.0.1:5000/get_regions')
+    dict2 = json.loads(regions.text)
+    destinations = requests.get('http://127.0.0.1:5000/get_destinations')
+    dict3 = json.loads(destinations.text)
+    return render_template('editor_view_attraction.html', submission=dict['submission'][0], regions=dict2['regions'], destination=dict3['destinations'])
+
 @server.route('/edit', methods=['POST'])
 def edit_region():
     write = request.form['write']
-    print(write)
     submission = requests.get('http://127.0.0.1:5000/api/writer/submission/edit',
                                json={"username": session['user'], "write_id": write})
-    print(submission)
     dict = json.loads(submission.text)
-    print(dict)
     return render_template('region_edit.html', submission=dict['submission'][0])
+
+@server.route('/edit/destination', methods=['POST'])
+def edit_destination():
+    write = request.form['write']
+    submission = requests.get('http://127.0.0.1:5000/api/writer/submission/edit-destination',
+                               json={"username": session['user'], "write_id": write})
+    dict = json.loads(submission.text)
+    return render_template('region_edit_destination.html', submission=dict['submission'][0])
+
+@server.route('/edit/attraction', methods=['POST'])
+def edit_attraction():
+    write = request.form['write']
+    submission = requests.get('http://127.0.0.1:5000/api/writer/submission/edit-attraction',
+                               json={"username": session['user'], "write_id": write})
+    dict = json.loads(submission.text)
+    regions = requests.get('http://127.0.0.1:5000/get_regions')
+    dict2 = json.loads(regions.text)
+    destinations = requests.get('http://127.0.0.1:5000/get_destinations')
+    dict3 = json.loads(destinations.text)
+    return render_template('region_edit_attraction.html', submission=dict['submission'][0], regions=dict2['regions'], destinations=dict3['destinations'])
+
 
 @server.route('/upload', methods=['POST', 'GET'])
 def upload_photo():

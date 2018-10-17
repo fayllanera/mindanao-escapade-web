@@ -116,7 +116,7 @@
             </dialog>
         </div>
     </script>
-      <style>
+    <style>
         .qq-gallery .qq-upload-button {
             background: #333;
             border: #333;
@@ -204,34 +204,39 @@
         </div>
     </div>
     <!-- Page Header -->
-    <div style="padding:2% 5% 5% 5%;">
+    {% if submission %}
+    <div>
         <br>
         <div style="padding:5%; background-color:#ebeced;">
             <h2>Write a Post</h2>
-            <select class="region form-control">
-              <option value="" selected disabled hidden>Choose here</option>
-              <option value="Zamboanga Peninsula">Zamboanga Peninsula</option>
-              <option value="Northern Mindanao">Northern Mindanao</option>
-              <option value="Davao Region">Davao Region</option>
-              <option value="SOCCSKSARGEN">SOCCSKSARGEN</option>
-              <option value="Caraga Region">Caraga Region</option>
-              <option value="ARMM">ARMM</option>
+            <select class="region form-control" required>
+                <option value="{{ submission.region }}" selected disabled hidden>{{  submission.region }}</option>
+                {% for region in regions %}
+                <option value="{{ region.name }}">{{ region.name }}</option>
+                {%  endfor %}
             </select>
-            <textarea class="tinymce" id="texteditor"></textarea>
+            <select class="destination form-control" required>
+                <option value="{{ submission.destination }}" selected disabled hidden>{{  submission.destination }} (optional)</option>
+                {% for destination in destinations %}
+                <option value="{{ destination.name }}">{{ destination.name }}</option>
+                {%  endfor %}
+            </select>
+            <input type="text" name="Location" placeholder="Location" value="{{ submission.location }}" id="location_des" style="width:100.2%;" required>
+            <input type="text" name="Title" placeholder="Title" id="title_des" value="{{ submission.name }}" style="width:100.2%;" required>
+            <input style="display:none;" value="{{ submission.write_id }}" id="writeid" type="number" readonly>
+            <textarea class="tinymce" id="texteditor">{{ submission.content | safe }}</textarea>
+            <h3>Photo:</h3>
+            <img class="image image-small" style="width:100%; height:20em; margin-bottom:1em; margin-top:1em;" src="data:image;base64, {{ submission.photo }}" />
             <div id="uploader"></div>
-            <input type="submit" class="btn" id="submit" value="Submit" style="margin-top:3em;">
-            <input type="submit" class="btn" id="draft" value="Save to Draft" style="margin-top:3em;">
-            <input type="submit" class="btn" id="cancel" value="Cancel" style="margin-top:3em;">
+            <input type="submit" class="btn" id="save_edit_destination" value="Save" style="margin-top:3em;">
+            <input type="submit" class="btn" id="cancel_edit" value="Cancel" style="margin-top:3em;">
         </div>
     </div>
-    <div id="data-containter">
-
-    </div>
-        <script>
+    {% endif %}
+    <script>
         // Some options to pass to the uploader are discussed on the next page
         var uploader = new qq.FineUploader({
             element: document.getElementById("uploader"),
-            debug: true,
             request: {
                 endpoint: '/upload'
             },
@@ -245,16 +250,52 @@
             validation: {
                 itemLimit: 1,
                 allowedExtensions: ['jpeg', 'jpg', 'gif', 'png']
-            },
-            callbacks: {
-                onSubmit: function (id, fileName) {
-                    alert(fileName);
-                },
-                setName: function (id, name) {
-                    alert(name);
-                }
             }
+
+        })
+    </script>
+    <script>
+        $(document).ready(function () {
+        $('#save_edit_destination').click(function () {
+            var content = tinymce.get("texteditor").getContent();
+            var region = $(".region option:selected").val();
+            var destination = $(".destination option:selected").val();
+            var write_id = $("#writeid").val();
+            var location = $("#location_des").val();
+            var name = $("#title_des").val();
+            var username = localStorage.getItem('user');
+            $.ajax({
+                url: "http://127.0.0.1:5000/api/writer/edit/attraction",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    'username': username,
+                    'content':content,
+                    'region': region,
+                    'destination': destination,
+                    'name' : name,
+                    'location' : location,
+                    'write_id' : write_id,
+                }),
+                method: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function () {
+                    console.log("success");
+                    alert("Submitted!");
+                    window.location.href='/writer/region'
+                },
+                error: function () {
+                    console.log('error')
+                }
             })
+            return false;
+        });
+        $('#cancel_edit').click(function () {
+            window.location.href='/writer/region'
+            return false;
+        });
+    })
+
     </script>
     <!-- Bootstrap core JavaScript -->
     <script src="../static/vendor/jquery/jquery.min.js"></script>

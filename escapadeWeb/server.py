@@ -47,6 +47,14 @@ def landing_admin():
         flash('You are not logged in! Please log in below!')
         return redirect('/')
 
+@server.route('/profile/', methods=['GET'])
+def profile_admin():
+    if 'user' in session:
+        return render_template("profile.html")
+    else:
+        flash('You are not logged in! Please log in below!')
+        return redirect('/')
+
 
 
 

@@ -4,12 +4,13 @@ body {
 
 /* Profile container */
 .profile {
-  margin: 20px 0;
+  margin: 48px 0;
+
 }
 
 /* Profile sidebar */
 .profile-sidebar {
-  padding: 20px 0 10px 0;
+  padding: 20px 0 1px 0;
   background: #fff;
 }
 
@@ -76,20 +77,27 @@ body {
 }
 
 .profile-usermenu ul li a {
-  color: #93a3b5;
-  font-size: 15px;
+  color: white  ;
+  font-size: 13px;
   font-weight: 400;
+  width: 133%;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 .profile-usermenu ul li a i {
-  margin-right: 15px;
+  margin-right: 5px;
   font-size: 14px;
 }
 
+.profile-usermenu:first-child:hover {
+    border-top-color: white;
+}
+
 .profile-usermenu ul li a:hover {
-  background-color: #fafcfd;
-  color: #5b9bd1;
+    background-color: #F4F9FD;
+    color: green;
+    border-left: 1px dotted white;
+    border-right: 1px dotted white;
 }
 
 .profile-usermenu ul li.active {
@@ -102,6 +110,7 @@ body {
   border-left: 3px solid #5b9bd1;
   margin-left: 15px;
 }
+
 
 /* Profile Content */
 .profile-content {

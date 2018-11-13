@@ -30,11 +30,11 @@ def login():
 def logout():
     if session['user'] is None:
         session.pop('user', None)
-        return redirect('index')
+        return redirect('/')
     else:
         session.pop('user', None)
         print ('popped!')
-        return redirect('index')
+        return redirect('/')
 
 
 
@@ -203,6 +203,18 @@ def delete_photo():
                              json={"username": session['user'], "filename": b64encode(file.read())})
     print(file)
     return jsonify({'success': 'true'})
+
+@server.route('/profile/info')
+def profile():
+    infos = requests.get('http://127.0.0.1:5000/api/profile',json={"username": session['user']})
+    dict = json.loads(infos.text)
+    return render_template('profile.html', infos=dict['infos'][0])
+
+@server.route('/profile/mypost')
+def profileposts():
+    submissions = requests.get('http://127.0.0.1:5000/get_yourpost',json={"username": session['user']})
+    dict = json.loads(submissions.text)
+    return render_template('profilepost.html', posts=dict['submissions'])
 
 
 CORS(server)

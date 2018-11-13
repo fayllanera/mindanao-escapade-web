@@ -76,15 +76,24 @@ body {
 }
 
 .profile-usermenu ul li a {
-  color: #93a3b5;
-  font-size: 15px;
+  color: white;
+  font-size: 13px;
   font-weight: 400;
+  width: 133%;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 .profile-usermenu ul li a i {
-  margin-right: 15px;
+  margin-right: 4px;
   font-size: 14px;
+}
+
+.profile-usermenu ul li a:hover{
+   background-color: #F4F9FD;
+   color: green;
+   border-left: 1px dotted white;
+   border-right: 1px dotter white;
+
 }
 
 .profile-usermenu ul li a:hover {

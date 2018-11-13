@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mindanao Escapade</title>
+        <script src="../static/js/jquery-3.3.1.min.js"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href='../static/vendor/fontawesome-free/css/fontawesome.css' rel='stylesheet' type='text/css'>
+    <link href='../static/vendor/fontawesome-free/css/fontawesome.min.css' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="../static/css/clean-blog.min.css" rel="stylesheet">
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <!-- <a class="navbar-brand" href="index.html">Mindanao Escapade</a> -->
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" data-toggle="modal"
+               data-target="#squarespaceModal"  href="post.html">Write a Post</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">My Account</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="/writer/drafts">My Drafts</a>
+                  <a class="dropdown-item" href="/writer/submissions">My Submissions</a>
+                </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <header class="masthead" style="background-color: #0085a1; padding: 35px; margin-bottom: -30%;" >
+      <div class="overlay"></div>
+      <div class="container" >
+        <div class="row">
+        </div>
+      </div>
+    </header>
+    <div style="padding:18%;">
+        <br>
+        <div style="padding:5%; background-color:#ebeced;">
+            <h2 style="margin-top:20%;">Write a Post</h2>
+            <form id="get-data-form">
+                <input type="text" name="Title" placeholder="Title" id="title" style="width:100.2%;">
+                <textarea class="tinymce" id="texteditor"></textarea>
+                <input type="submit" class="btn" value="Submit" style="margin-top:3em;">
+            </form>
+        </div>
+    </div>
+    <div id="data-containter">
+
+    </div>
+    <script src="../static/vendor/jquery/jquery.min.js"></script>
+    <script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom scripts for this template -->
+    <script src="../static/plugin/tinymce/js/tinymce/tinymce.min.js"></script>
+    <script src="../static/plugin/tinymce/js/tinymce/init-tinymce.js"></script>
+    <script src="../static/js/jquery-3.3.1.min.js"></script>
+    <script src="../static/js/getdata.js"></script>
+    <script src="../static/js/submit.js"></script>
+    <!--
+    <script src="{{url_for('static', filename='plugin/tinymce/js/tinymce/tinymce.min.js')}}"></script>
+    <script src="{{url_for('static', filename='plugin/tinymce/js/tinymce/init-tinymce.js')}}"></script>
+    <script src="{{url_for('static', filename='js/jquery-3.3.1.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/getdata.js')}}"></script>
+    <script src="{{url_for('static', filename='js/submit.js')}}"></script>
+    -->
+</body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Mindanao Escapade</title>
+    <script src="../static/js/jquery-3.3.1.min.js"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href='../static/vendor/fontawesome-free/css/fontawesome.css' rel='stylesheet' type='text/css'>
+    <link href='../static/vendor/fontawesome-free/css/fontawesome.min.css' rel='stylesheet' type='text/css'>
+    <!-- <link href="../static/css/agency.css" rel="stylesheet"> -->
+
+    <!-- Custom styles for this template -->
+    <link href="../static/css/clean-blogT.css" rel="stylesheet">
+    <link href="../static/plugin/fine-uploader/fine-uploader-gallery.min.css" rel="stylesheet">
+    <script>
+       $(document).ready(function () {
+                $('#type').submit(function () {
+                    var type = $(".type-select option:selected").val();
+                    alert(type);
+                    localStorage.setItem('type_selected', type);
+                    if (type == 'Region'){
+                        window.location.href='/writer/region', true;
+                    } else if (type == 'Destination') {
+                        window.location.href='/writer/destination', true;
+                    } else {
+                        window.location.href='/writer/attraction', true;
+                    }
+                    return false;
+                });
+            })
+    </script>
+    <script src="../static/plugin/fine-uploader/fine-uploader.min.js"></script>
+    <script type="text/template" id="qq-template">
+        <div class="qq-uploader-selector qq-uploader qq-gallery" qq-drop-area-text="Drop files here">
+            <div class="qq-total-progress-bar-container-selector qq-total-progress-bar-container">
+                <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-total-progress-bar-selector qq-progress-bar qq-total-progress-bar"></div>
+            </div>
+            <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
+                <span class="qq-upload-drop-area-text-selector"></span>
+            </div>
+            <div class="qq-upload-button-selector qq-upload-button" style="width:20% !important;">
+                <div>Upload a file</div>
+            </div>
+            <span class="qq-drop-processing-selector qq-drop-processing">
+                <span>Processing dropped files...</span>
+                <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
+            </span>
+            <ul class="qq-upload-list-selector qq-upload-list" role="region" aria-live="polite" aria-relevant="additions removals">
+                <li>
+                    <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
+                    <div class="qq-progress-bar-container-selector qq-progress-bar-container">
+                        <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-progress-bar-selector qq-progress-bar"></div>
+                    </div>
+                    <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
+                    <div class="qq-thumbnail-wrapper">
+                        <img class="qq-thumbnail-selector" qq-max-size="120" qq-server-scale>
+                    </div>
+                    <button type="button" class="qq-upload-cancel-selector qq-upload-cancel">X</button>
+                    <button type="button" class="qq-upload-retry-selector qq-upload-retry">
+                        <span class="qq-btn qq-retry-icon" aria-label="Retry"></span>
+                        Retry
+                    </button>
+
+                    <div class="qq-file-info">
+                        <div class="qq-file-name">
+                            <span class="qq-upload-file-selector qq-upload-file"></span>
+                            <span class="qq-edit-filename-icon-selector qq-btn qq-edit-filename-icon" aria-label="Edit filename"></span>
+                        </div>
+                        <input class="qq-edit-filename-selector qq-edit-filename" tabindex="0" type="text">
+                        <span class="qq-upload-size-selector qq-upload-size"></span>
+                        <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">
+                            <span class="qq-btn qq-delete-icon" aria-label="Delete"></span>
+                        </button>
+                        <button type="button" class="qq-btn qq-upload-pause-selector qq-upload-pause">
+                            <span class="qq-btn qq-pause-icon" aria-label="Pause"></span>
+                        </button>
+                        <button type="button" class="qq-btn qq-upload-continue-selector qq-upload-continue">
+                            <span class="qq-btn qq-continue-icon" aria-label="Continue"></span>
+                        </button>
+                    </div>
+                </li>
+            </ul>
+
+            <dialog class="qq-alert-dialog-selector">
+                <div class="qq-dialog-message-selector"></div>
+                <div class="qq-dialog-buttons">
+                    <button type="button" class="qq-cancel-button-selector">Close</button>
+                </div>
+            </dialog>
+
+            <dialog class="qq-confirm-dialog-selector">
+                <div class="qq-dialog-message-selector"></div>
+                <div class="qq-dialog-buttons">
+                    <button type="button" class="qq-cancel-button-selector">No</button>
+                    <button type="button" class="qq-ok-button-selector">Yes</button>
+                </div>
+            </dialog>
+
+            <dialog class="qq-prompt-dialog-selector">
+                <div class="qq-dialog-message-selector"></div>
+                <input type="text">
+                <div class="qq-dialog-buttons">
+                    <button type="button" class="qq-cancel-button-selector">Cancel</button>
+                    <button type="button" class="qq-ok-button-selector">Ok</button>
+                </div>
+            </dialog>
+        </div>
+    </script>
+      <style>
+        .qq-gallery .qq-upload-button {
+            background: #333;
+            border: #333;
+        }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-xl navbar-light fixed-top" style="background-color: black; height: 10%;" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand" href="index.html" style="margin-right:-20px;">Mindanao Escapade</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <div class="navbar-header">
+                <div class="nav navbar-nav navbar-right">
+                      <li>
+                          <input type="text" placeholder="Search.." name="search" style="height: 25px; font-size: 20px;">
+                          <a href="#"> <i class="fas fa-search" style="color: white; margin-right: 80px;"></i></a>
+                      </li>
+                      <li><a href="/notification" class="js-scroll-trigger" data-toggle="modal"
+                            data-target="#squarespaceModal" style="color: white;"><span style="color: white; margin-right: 25px;">Write a Post</span>
+                            <span class="badge pull-right"></span>
+                      </a></li>
+                      <li><a href="/notification" style="color: white;"><span class="fas fa-home" style="color: white; margin-right: 30px;"> </span>
+                          <span class="badge pull-right"></span>
+                      </a></li>
+                      <li><a href="/notification" style="color: white;"><span class="fas fa-bell" style="color: white; margin-right: 25px;"> </span>
+                            <span class="badge pull-right"></span>
+                      </a></li>
+                      <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: white;">
+                              <span class="fa fa-align-justify" style="color: white"></span>
+                          </a>
+                          <ul class="dropdown-menu" aria-labelledby="about-us">
+                              <li><a href="/profile/" style="color: gray">Profile</a></li>
+                              <li><a href="/writer/drafts">My Drafts</a></li>
+                              <li><a href="/writer/submissions">My Submissions</a></li>
+                              <li><a href="/logout" style="color: gray"></span>Log out</a></li>
+                          </ul>
+                      </li>
+                </div>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="signin-modal modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="section-heading">Select what to write</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">Close</span></button>
+                </div>
+
+                <div class="modal-body">
+                    <fieldset>
+                        <div class="row">
+                            <div class="col-sm-8 col-md-12  col-md-offset-12">
+                                <form id="type">
+                                    <div class="form-group">
+                                        <select tabindex="1" class="type-select form-control">
+                                          <option value="" selected disabled hidden>Choose here</option>
+                                          <option value="Region">Region</option>
+                                          <option value="Destination">Destination</option>
+                                          <option value="Attraction">Attraction</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" style="background-color: #333; border-color:#333;" class="btn btn-xl btn-primary btn-block">Next
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header -->
+        <div style="padding:2% 5% 5% 5%;">
+        <br>
+        <div style="padding:5%; background-color:#ebeced;">
+            <h2>Write a Post</h2>
+
+            <select class="region form-control" required>
+            <option value="" selected disabled hidden>Choose a region</option>
+                {% for region in regions %}
+              <option value="{{ region.name }}">{{ region.name }}</option>
+                {%  endfor %}
+            </select>
+
+            <input type="text" name="Location" placeholder="Location" id="location_des" style="width:100.2%;" required>
+            <input type="text" name="Title" placeholder="Title" id="title_des" style="width:100.2%;" required>
+            <textarea class="tinymce" id="texteditor"></textarea>
+            <div id="uploader"></div>
+            <input type="submit" class="btn" id="submit_dest" value="Submit" style="margin-top:3em;">
+            <input type="submit" class="btn" id="draft_dest" value="Save to Draft" style="margin-top:3em;">
+            <input type="submit" class="btn" id="cancel" value="Cancel" style="margin-top:3em;">
+        </div>
+    </div>
+    <div id="data-containter">
+
+    </div>
+        <script>
+        // Some options to pass to the uploader are discussed on the next page
+        var uploader = new qq.FineUploader({
+            element: document.getElementById("uploader"),
+            debug: true,
+            request: {
+                endpoint: '/upload'
+            },
+            deleteFile: {
+                enabled: true,
+                endpoint: '/delete'
+            },
+            retry: {
+               enableAuto: true
+            },
+            validation: {
+                itemLimit: 1,
+                allowedExtensions: ['jpeg', 'jpg', 'gif', 'png']
+            },
+            callbacks: {
+                onSubmit: function (id, fileName) {
+                    alert(fileName);
+                },
+                setName: function (id, name) {
+                    alert(name);
+                }
+            }
+            })
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#submit_dest').click(function () {
+                var content = tinymce.get("texteditor").getContent();
+                var region = $(".region option:selected").val();
+                var name = $("#title_des").val();
+                var username = localStorage.getItem('user')
+                var location = $("#location_des").val();
+                $.ajax({
+                    url: "http://127.0.0.1:5000/api/writer/submit/destination",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        'username': username,
+                        'content':content,
+                        'region': region,
+                        'name' : name,
+                        'location' : location,
+                    }),
+                    method: "POST",
+                    dataType: "json",
+                    crossDomain: true,
+                    success: function () {
+                        console.log("success");
+                        alert("Submitted!");
+                        window.location.href='/writer/region'
+                    },
+                    error: function () {
+                        console.log('error')
+                    }
+                })
+                return false;
+            });
+            $('#draft_dest').click(function () {
+                var content = tinymce.get("texteditor").getContent();
+                var region = $(".region option:selected").val();
+                var name = $("#title_des").val();
+                var username = localStorage.getItem('user')
+                var location = $("#location_des").val();
+                $.ajax({
+                    url: "http://127.0.0.1:5000/api/writer/draft/destination",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        'username': username,
+                        'content':content,
+                        'region': region,
+                        'name' : name,
+                        'location' : location,
+                    }),
+                    method: "POST",
+                    dataType: "json",
+                    crossDomain: true,
+                    success: function () {
+                        console.log("success");
+                        alert("Submitted!");
+                        window.location.href='/writer/region'
+                    },
+                    error: function () {
+                        console.log('error')
+                    }
+                })
+                return false;
+            });
+            $('#cancel').click(function () {
+                window.location.href='/writer/region';
+                return false;
+            });
+        });
+    </script>
+    <!-- Bootstrap core JavaScript -->
+    <script src="../static/vendor/jquery/jquery.min.js"></script>
+    <script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom scripts for this template -->
+    <script src="../static/plugin/tinymce/js/tinymce/tinymce.min.js"></script>
+    <script src="../static/plugin/tinymce/js/tinymce/init-tinymce.js"></script>
+    <script src="../static/js/jquery-3.3.1.min.js"></script>
+    <script src="../static/js/getdata.js"></script>
+    <script src="../static/js/submit.js"></script>
+    <!-- Custom scripts for this template -->
+    <script src="../static/js/clean-blog.min.js"></script>
+
+  </body>
+
+</html>

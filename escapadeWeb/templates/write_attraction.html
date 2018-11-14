@@ -4,7 +4,7 @@
 <script>
   $(document).ready(function () {
             var role_id = localStorage.getItem('role_id');
-            if (role_id != '2') {
+            if (role_id != '3') {
                 window.location.href = '/unauthorized';
             }
         })
@@ -165,7 +165,7 @@
             <select class="destination form-control">
             <option value="" selected disabled hidden>Choose a destination(optional)</option>
                 {% for destination in destinations %}
-              <option value="{{ destination.name }}">{{ destination.name }} ({{ destination.region_name }})</option>
+              <option value="{{ destination.location }}">{{ destination.location }} ({{ destination.region_name }})</option>
                 {%  endfor %}
             </select>
             <input type="text" name="Location" placeholder="Location" id="location_des" style="width:100.2%;" required>
@@ -241,7 +241,7 @@
                     success: function () {
                         console.log("success");
                         alert("Submitted!");
-                        window.location.href='/writer/region'
+                        window.location.href='/writer'
                     },
                     error: function () {
                         console.log('error')
@@ -273,7 +273,7 @@
                     success: function () {
                         console.log("success");
                         alert("Submitted!");
-                        window.location.href='/writer/region'
+                        window.location.href='/writer'
                     },
                     error: function () {
                         console.log('error')
@@ -282,7 +282,7 @@
                 return false;
             });
             $('#cancel').click(function () {
-                window.location.href='/writer/region';
+                window.location.href='/writer';
                 return false;
             });
         });

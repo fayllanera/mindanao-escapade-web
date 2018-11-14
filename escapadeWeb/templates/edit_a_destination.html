@@ -4,7 +4,7 @@
 <script>
   $(document).ready(function () {
             var role_id = localStorage.getItem('role_id');
-            if (role_id != '2') {
+            if (role_id != '3') {
                 window.location.href = '/unauthorized';
             }
         })
@@ -170,8 +170,15 @@
             <h3>Photo:</h3>
             <img class="image image-small" style="width:100%; height:20em; margin-bottom:1em; margin-top:1em;" src="data:image;base64, {{ submission.photo }}" />
             <div id="uploader"></div>
+            {% if submission.comment %}
+            <input style="display:none;" value="{{ submission.write_id }}" id="writeid" type="number" readonly>
+            <input type="submit" class="btn" id="submit_dest" value="Submit" style="margin-top:3em;">
+            <input type="submit" class="btn" id="draft_dest" value="Save to Draft" style="margin-top:3em;">
+            <input type="submit" class="btn" id="cancel" value="Cancel" style="margin-top:3em;">
+            {% else %}
             <input type="submit" class="btn" id="save_edit_destination" value="Save" style="margin-top:3em;">
             <input type="submit" class="btn" id="cancel_edit" value="Cancel" style="margin-top:3em;">
+            {% endif %}
             {% endif %}
             </div>
           </div>
@@ -255,6 +262,76 @@
         });
     })
 
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#submit_dest').click(function () {
+                var content = tinymce.get("texteditor").getContent();
+                var region = $(".region option:selected").val();
+                var name = $("#title_des").val();
+                var username = localStorage.getItem('user')
+                var location = $("#location_des").val();
+                var write_id = $("#writeid").val();
+                $.ajax({
+                    url: "http://127.0.0.1:5000/api/writer/submit/destination2",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        'username': username,
+                        'content':content,
+                        'region': region,
+                        'name' : name,
+                        'location' : location,
+                        'write_id' : write_id,
+                    }),
+                    method: "POST",
+                    dataType: "json",
+                    crossDomain: true,
+                    success: function () {
+                        console.log("success");
+                        alert("Submitted!");
+                        window.location.href='/writer'
+                    },
+                    error: function () {
+                        console.log('error')
+                    }
+                })
+                return false;
+            });
+            $('#draft_dest').click(function () {
+                var content = tinymce.get("texteditor").getContent();
+                var region = $(".region option:selected").val();
+                var name = $("#title_des").val();
+                var username = localStorage.getItem('user')
+                var location = $("#location_des").val();
+                $.ajax({
+                    url: "http://127.0.0.1:5000/api/writer/draft/destination",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        'username': username,
+                        'content':content,
+                        'region': region,
+                        'name' : name,
+                        'location' : location,
+                    }),
+                    method: "POST",
+                    dataType: "json",
+                    crossDomain: true,
+                    success: function () {
+                        console.log("success");
+                        alert("Submitted!");
+                        window.location.href='/writer'
+                    },
+                    error: function () {
+                        console.log('error')
+                    }
+                })
+                return false;
+            });
+            $('#cancel').click(function () {
+                window.location.href='/writer';
+                return false;
+            });
+        });
     </script>
 <script src="{{url_for('static', filename='plugin/tinymce/js/tinymce/tinymce.min.js')}}"></script>
 <script src="{{url_for('static', filename='plugin/tinymce/js/tinymce/init-tinymce.js')}}"></script>

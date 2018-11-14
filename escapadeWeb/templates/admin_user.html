@@ -24,6 +24,9 @@
         color: #343a40;
         font-size: 16px;
     }
+    td{
+        text-transform: none;
+    }
     th{
         font-family: 'Saira Extra Condensed', serif;
         font-weight: 700;
@@ -60,15 +63,15 @@
 {% endblock %}
 {% block content %}
 <!-- Masthead -->
-    <section class="page-section cta" style="background-color:whitesmoke; margin-top:0em; margin-bottom:0em;">
-          <div class="container">
+    <section class="page-section cta" style="background-color:whitesmoke; margin-top:0em; margin-bottom:0em; min-height: 90vh;">
+          <div class="container" style="width:auto;">
             <div class="row">
               <div class="col-xl-9 mx-auto">
                 <div class="cta-inner text-center rounded" style="padding:0; margin:0;">
                   <h2 class="section-heading mb-4">
                     <span class="section-heading-upper">Register</span>
                   </h2>
-                    <div id="table" style="background-color: white; border-radius: 10px; margin-left:0;">
+                    <div id="table" style="background-color: white; border-radius: 10px; margin-left:0; text-transform: none !important;">
                     <table id="maintable" class="table table-hover">
 
                     </table>

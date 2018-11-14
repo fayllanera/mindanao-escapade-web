@@ -16,11 +16,86 @@
                   <div class="bg-faded rounded p-5">
                     <h2 class="section-heading mb-4">
                     {% if post.type == 'Region' %}
-                      <span class="section-heading-upper">Region</span>
+                      <span class="section-heading-upper">Region <div class="btn-group" style="display: inline-block;
+    font-size: 0;
+    position: relative;
+    vertical-align: middle;
+    white-space: nowrap; margin-left:1em;">
+                      <a data-toggle="dropdown" class="btn btn-info" style="font-size: 10px; background-color: transparent;
+    border-color: transparent;
+    border: transparent; box-shadow:0px 0px 0px 0px; -webkit-box-shadow: 0px 0px 0px 0px;">
+                         <i class="fa fa-ellipsis-h"></i>
+                    </a>
+                      <ul class="dropdown-menu" style="float: right;
+    list-style: none outside none;
+    margin: 0;
+    min-width: 61px;
+    padding: 0;">
+        				<li>
+    					    <form action="{{url_for('delete_post_admin')}}" method="post">
+                            <input style="display:none;" value="{{ post.write_id }}" name="write_id" type="number" readonly>
+                            <input style="display:none;" value="Region" name="type" type="number" readonly>
+    					    <button data-original-title="Delete" type="submit" rel="tooltip"  href="#" class="btn btn-primary" data-placement="left" style="color: #333; font-size:12px; background-color:transparent; border-color:#333;">
+								<span class="glyphicon glyphicon-trash"></span>Delete Post
+							</button>
+                            </form>
+    					</li>
+                      </ul>
+                      </div></span>
                     {% elif post.type == 'Destination' %}
-                        <a href="/admin/region/{{post.region_name}}"><span class="section-heading-upper">Discover {{ post.region_name }}</span></a>
+                        <span class="section-heading-upper"><a href="/admin/region/{{post.region_name}}">Discover {{ post.region_name }}</a><div class="btn-group" style="display: inline-block;
+    font-size: 0;
+    position: relative;
+    vertical-align: middle;
+    white-space: nowrap; margin-left:1em;">
+                      <a data-toggle="dropdown" class="btn btn-info" style="font-size: 10px; background-color: transparent;
+    border-color: transparent;
+    border: transparent; box-shadow:0px 0px 0px 0px; -webkit-box-shadow: 0px 0px 0px 0px;">
+                         <i class="fa fa-ellipsis-h"></i>
+                    </a>
+                      <ul class="dropdown-menu" style="float: right;
+    list-style: none outside none;
+    margin: 0;
+    min-width: 61px;
+    padding: 0;">
+        				<li>
+    					    <form action="{{url_for('delete_post_admin')}}" method="post">
+                            <input style="display:none;" value="{{ post.write_id }}" name="write_id" type="number" readonly>
+                            <input style="display:none;" value="Destination" name="type" type="number" readonly>
+    					    <button data-original-title="Delete" type="submit" rel="tooltip"  href="#" class="btn btn-primary" data-placement="left" style="color: #333; font-size:12px; background-color:transparent; border-color:#333;">
+								<span class="glyphicon glyphicon-trash"></span>Delete Post
+							</button>
+                            </form>
+    					</li>
+                      </ul>
+                      </div></span>
                     {% elif post.type == 'Attraction' %}
-                        <a href="/admin/region/{{post.region_name}}"><span class="section-heading-upper">Discover {{ post.region_name }}</span></a>
+                        <span class="section-heading-upper"><a href="/admin/region/{{post.region_name}}">Discover {{ post.region_name }}</a><div class="btn-group" style="display: inline-block;
+    font-size: 0;
+    position: relative;
+    vertical-align: middle;
+    white-space: nowrap; margin-left:1em;">
+                      <a data-toggle="dropdown" class="btn btn-info" style="font-size: 10px; background-color: transparent;
+    border-color: transparent;
+    border: transparent; box-shadow:0px 0px 0px 0px; -webkit-box-shadow: 0px 0px 0px 0px;">
+                         <i class="fa fa-ellipsis-h"></i>
+                    </a>
+                      <ul class="dropdown-menu" style="float: right;
+    list-style: none outside none;
+    margin: 0;
+    min-width: 61px;
+    padding: 0;">
+        				<li>
+    					    <form action="{{url_for('delete_post_admin')}}" method="post">
+                            <input style="display:none;" value="{{ post.write_id }}" name="write_id" type="number" readonly>
+                            <input style="display:none;" value="Attraction" name="type" type="number" readonly>
+    					    <button data-original-title="Delete" type="submit" rel="tooltip"  href="#" class="btn btn-primary" data-placement="left" style="color: #333; font-size:12px; background-color:transparent; border-color:#333;">
+								<span class="glyphicon glyphicon-trash"></span>Delete Post
+							</button>
+                            </form>
+    					</li>
+                      </ul>
+                      </div></span>
                     {% endif %}
                       <span class="section-heading-lower">{{ post.name }}</span>
                     </h2>

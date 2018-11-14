@@ -4,7 +4,7 @@
 <script>
   $(document).ready(function () {
             var role_id = localStorage.getItem('role_id');
-            if (role_id != '2') {
+            if (role_id != '3') {
                 window.location.href = '/unauthorized';
             }
         })
@@ -155,7 +155,8 @@
           <div class="col-xl-8 mx-auto">
             <div class="custom-inner text-center rounded">
               <h2 class="section-heading mb-4">
-                <span class="section-heading-upper">My Submissions</span>
+                <span class="section-heading-upper pull-left">My Submissions</span>
+                  <a href="/writer/returned-submissions"><span class="section-heading-upper pull-right">Check Returned Submissions</span></a>
               </h2>
                 {% for submission in submissions %}
                     {%  if submission.type == 'Region' %}

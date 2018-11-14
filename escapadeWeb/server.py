@@ -23,12 +23,11 @@ def before_request():
 
 @server.route('/login', methods=['GET','POST'])
 def login():
-    data = request.get_json()
     if request.method == 'POST':
         print('pop')
         session.pop('user', None)
         session['user'] = request.form['username']
-
+        print 'pop'
         print session['user']
         g.user = session['user']
         return redirect('#')
@@ -37,9 +36,11 @@ def login():
 @server.route('/logout')
 def logout():
     if session['user'] is None:
+        session.pop('user', None)
         return redirect('/')
     else:
-        session.pop('user')
+        session.pop('user', None)
+        print ('popped!')
         return redirect('/')
 
 
@@ -84,6 +85,27 @@ def admin_view_attraction(name):
                         json={"title": name})
     post_dict = json.loads(post.text)
     return render_template('admin_view_post.html', post=post_dict['post'][0])
+
+@server.route('/editor/region/<name>', methods=['GET'])
+def editor_view_region(name):
+    post = requests.get('http://127.0.0.1:5000/get/region',
+                               json={"title": name})
+    post_dict = json.loads(post.text)
+    return render_template('editor_view_post.html', post=post_dict['post'][0])
+
+@server.route('/editor/destination/<name>', methods=['GET'])
+def editor_view_destination(name):
+    post = requests.get('http://127.0.0.1:5000/get/destination',
+                        json={"title": name})
+    post_dict = json.loads(post.text)
+    return render_template('editor_view_post.html', post=post_dict['post'][0])
+
+@server.route('/editor/attraction/<name>', methods=['GET'])
+def editor_view_attraction(name):
+    post = requests.get('http://127.0.0.1:5000/get/attraction',
+                        json={"title": name})
+    post_dict = json.loads(post.text)
+    return render_template('editor_view_post.html', post=post_dict['post'][0])
 
 @server.route('/writer/region/<name>', methods=['GET'])
 def writer_view_region(name):
@@ -145,6 +167,23 @@ def view_admin_all_attractions():
     post_dict = json.loads(post.text)
     return render_template('admin_attractions.html', posts=post_dict['posts'])
 
+@server.route('/editor/region', methods=['GET'])
+def view_editor_all_region():
+    post = requests.get('http://127.0.0.1:5000/get/all/region')
+    post_dict = json.loads(post.text)
+    return render_template('editor_region.html', posts=post_dict['posts'])
+
+@server.route('/editor/destinations', methods=['GET'])
+def view_editor_all_destination():
+    post = requests.get('http://127.0.0.1:5000/get/all/destinations')
+    post_dict = json.loads(post.text)
+    return render_template('editor_destinations.html', posts=post_dict['posts'])
+
+@server.route('/editor/attractions', methods=['GET'])
+def view_editor_all_attractions():
+    post = requests.get('http://127.0.0.1:5000/get/all/attractions')
+    post_dict = json.loads(post.text)
+    return render_template('editor_attractions.html', posts=post_dict['posts'])
 
 @server.route('/writer/view/region', methods=['GET'])
 def view_writer_all_region():
@@ -204,11 +243,22 @@ def write_attraction():
 
 @server.route('/writer')
 def writer():
-    if session['user'] in session:
+    if 'user' in session:
         submissions = requests.get('http://127.0.0.1:5000/get_posted')
         dict = json.loads(submissions.text)
         return render_template('writer.html', posts=dict['submissions'])
     else:
+        print('error')
+        return redirect('unauthorized')
+
+@server.route('/editor')
+def editor():
+    if 'user' in session:
+        submissions = requests.get('http://127.0.0.1:5000/get_posted')
+        dict = json.loads(submissions.text)
+        return render_template('editor.html', posts=dict['submissions'])
+    else:
+        print('error')
         return redirect('unauthorized')
 
 @server.route('/writer/submissions')
@@ -217,6 +267,13 @@ def submissions():
                              json={"username": session['user']})
     dict = json.loads(submissions.text)
     return render_template('write_submission.html', submissions=dict['submissions'])
+
+@server.route('/writer/returned-submissions')
+def returned_submissions():
+    submissions = requests.get('http://127.0.0.1:5000/api/writer/submissions/returned',
+                             json={"username": session['user']})
+    dict = json.loads(submissions.text)
+    return render_template('writer_returned_submissions.html', submissions=dict['submissions'])
 
 @server.route('/writer/drafts')
 def drafts():
@@ -294,7 +351,7 @@ def editor_edit_attraction():
     dict2 = json.loads(regions.text)
     destinations = requests.get('http://127.0.0.1:5000/get_destinations')
     dict3 = json.loads(destinations.text)
-    return render_template('editor_view_attraction.html', submission=dict['submission'][0], regions=dict2['regions'], destination=dict3['destinations'])
+    return render_template('editor_view_attraction.html', submission=dict['submission'][0], regions=dict2['regions'], destinations=dict3['destinations'])
 
 @server.route('/edit', methods=['POST'])
 def edit_region():
@@ -352,6 +409,32 @@ def profileposts():
     submissions = requests.get('http://127.0.0.1:5000/get_yourpost',json={"username": session['user']})
     dict = json.loads(submissions.text)
     return render_template('profilepost.html', posts=dict['submissions'])
+
+@server.route('/delete/admin', methods=['POST'])
+def delete_post_admin():
+    write_id = request.form['write_id']
+    type = request.form.get('type')
+    if type == 'Region':
+        infos = requests.post('http://127.0.0.1:5000/api/editor/delete/region', json={"write_id": write_id})
+    elif type == 'Destination':
+        infos = requests.post('http://127.0.0.1:5000/api/editor/delete/destination', json={"write_id": write_id})
+    else:
+        infos = requests.post('http://127.0.0.1:5000/api/editor/delete/attraction', json={"write_id": write_id})
+    return redirect(url_for('landing_admin'))
+
+@server.route('/delete/editor', methods=['POST'])
+def delete_post():
+    write_id = request.form['write_id']
+    type = request.form.get('type')
+    print type
+    print write_id
+    if type == 'Region':
+        infos = requests.post('http://127.0.0.1:5000/api/editor/delete/region', json={"write_id": write_id})
+    elif type == 'Destination':
+        infos = requests.post('http://127.0.0.1:5000/api/editor/delete/destination', json={"write_id": write_id})
+    else:
+        infos = requests.post('http://127.0.0.1:5000/api/editor/delete/attraction', json={"write_id": write_id})
+    return redirect(url_for('editor'))
 
 
 CORS(server)

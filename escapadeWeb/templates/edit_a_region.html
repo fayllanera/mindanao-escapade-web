@@ -26,7 +26,6 @@
             });
         })
 </script>
-<link href="{{url_for('static', filename='css/news.css')}}" rel="stylesheet">
 <link href="{{url_for('static', filename='plugin/fine-uploader/fine-uploader.min.css')}}" rel="stylesheet">
 <script src="{{url_for('static', filename='plugin/fine-uploader/fine-uploader.min.js')}}"></script>
     <script type="text/template" id="qq-template">
@@ -149,46 +148,39 @@
     </div>
 </div>
 <section class="page-section custom" style="    padding-top: 5rem;
-    padding-bottom: 5rem; background-color: transparent; margin-top:0em; margin-bottom:0em;">
+    padding-bottom: 5rem; background-color: whitesmoke; margin-top:0em; margin-bottom:0em;">
       <div class="container" style="max-width:100%;">
         <div class="row">
           <div class="col-xl-9 mx-auto">
             <div class="custom-inner text-center rounded">
               <h2 class="section-heading mb-4">
-                <span class="section-heading-upper">Drafts</span>
+                <span class="section-heading-upper">Write a Post</span>
               </h2>
-                {% for submission in submissions %}
-                {% if submission.type == 'Region' %}
-                <form action="{{ url_for('edit_drafts') }}" method="post">
-                {% elif submission.type == 'Destination' %}
-                <form action="{{ url_for('edit_drafts_destination') }}" method="post">
-                {% else %}
-                <form action="{{ url_for('edit_drafts_attraction') }}" method="post">
-                {% endif %}
-                    <input name="write" type="number" style="display:none;" value="{{ submission.write_id }}" readonly>
-
-                      <div class="headline-card tracked loaded" style="height: 420px;">
-                        <img class="image image-small" style="" src="data:image;base64, {{ submission.photo }}" />
-                        <a class="gradient gradient-small" href="#" onclick="$(this).closest('form').submit()"></a>
-                        <div class="body" style="bottom:100px;">
-                          <h3>
-                            <a href="#" onclick="$(this).closest('form').submit()">{{ submission.name }}</a>
-                          </h3>
-                            <h3>by {{ submission.author_name }}</h3>
-                        </div>
-
-                        <div class="text-preview" style="bottom:35px;">
-                          {{ submission.content | safe }}
-                        </div>
-                      </div>
-                </form>
-                {% else %}
-                    <h4 style="text-align: center;">There are no submissions posted.</h4>
-                {% endfor %}
+              {% if submission %}
+            <select class="region form-control">
+              <option value="{{  submission.name }}" selected disabled hidden>{{  submission.name }}</option>
+              <option value="Zamboanga Peninsula">Zamboanga Peninsula</option>
+              <option value="Northern Mindanao">Northern Mindanao</option>
+              <option value="Davao Region">Davao Region</option>
+              <option value="SOCCSKSARGEN">SOCCSKSARGEN</option>
+              <option value="Caraga Region">Caraga Region</option>
+              <option value="ARMM">ARMM</option>
+            </select>
+            <input style="display:none;" value="{{ submission.write_id }}" id="writeid" type="number" readonly>
+            <textarea class="tinymce" id="texteditor">{{ submission.content | safe }}</textarea>
+            <h3>Photo:</h3>
+            <img class="image image-small" style="width:100%; height:20em; margin-bottom:1em; margin-top:1em;" src="data:image;base64, {{ submission.photo }}" />
+            <div id="uploader"></div>
+            <input type="submit" class="btn" id="save_edit" value="Save" style="margin-top:3em;">
+            <input type="submit" class="btn" id="cancel_edit" value="Cancel" style="margin-top:3em;">
+            {% endif %}
             </div>
           </div>
         </div>
       </div>
+        <div id="data-containter">
+
+        </div>
 </section>
 
 
@@ -226,71 +218,40 @@
 </script>
 <script>
         $(document).ready(function () {
-            $('#submit_dest').click(function () {
-                var content = tinymce.get("texteditor").getContent();
-                var region = $(".region option:selected").val();
-                var name = $("#title_des").val();
-                var username = localStorage.getItem('user')
-                var location = $("#location_des").val();
-                $.ajax({
-                    url: "http://127.0.0.1:5000/api/writer/submit/destination",
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify({
-                        'username': username,
-                        'content':content,
-                        'region': region,
-                        'name' : name,
-                        'location' : location,
-                    }),
-                    method: "POST",
-                    dataType: "json",
-                    crossDomain: true,
-                    success: function () {
-                        console.log("success");
-                        alert("Submitted!");
-                        window.location.href='/writer'
-                    },
-                    error: function () {
-                        console.log('error')
-                    }
-                })
-                return false;
-            });
-            $('#draft_dest').click(function () {
-                var content = tinymce.get("texteditor").getContent();
-                var region = $(".region option:selected").val();
-                var name = $("#title_des").val();
-                var username = localStorage.getItem('user')
-                var location = $("#location_des").val();
-                $.ajax({
-                    url: "http://127.0.0.1:5000/api/writer/draft/destination",
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify({
-                        'username': username,
-                        'content':content,
-                        'region': region,
-                        'name' : name,
-                        'location' : location,
-                    }),
-                    method: "POST",
-                    dataType: "json",
-                    crossDomain: true,
-                    success: function () {
-                        console.log("success");
-                        alert("Submitted!");
-                        window.location.href='/writer'
-                    },
-                    error: function () {
-                        console.log('error')
-                    }
-                })
-                return false;
-            });
-            $('#cancel').click(function () {
-                window.location.href='/writer';
-                return false;
-            });
+        $('#save_edit').click(function () {
+            var content = tinymce.get("texteditor").getContent();
+            var region = $(".region option:selected").val();
+            var write_id = $("#writeid").val();
+            var username = localStorage.getItem('user');
+            $.ajax({
+                url: "http://127.0.0.1:5000/api/writer/edit",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    'username': username,
+                    'content':content,
+                    'name': region,
+                    'write_id' : write_id,
+                }),
+                method: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function () {
+                    console.log("success");
+                    alert("Submitted!");
+                    window.location.href='/writer/submissions'
+                },
+                error: function () {
+                    console.log('error')
+                }
+            })
+            return false;
         });
+        $('#cancel_edit').click(function () {
+            window.location.href='/writer/submissions'
+            return false;
+        });
+    })
+
     </script>
 <script src="{{url_for('static', filename='plugin/tinymce/js/tinymce/tinymce.min.js')}}"></script>
 <script src="{{url_for('static', filename='plugin/tinymce/js/tinymce/init-tinymce.js')}}"></script>

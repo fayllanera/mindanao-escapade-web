@@ -77,10 +77,11 @@ body {
 
 .profile-usermenu ul li a {
   color: white;
-  font-size: 13px;
+  font-size: 20px;
   font-weight: 400;
   width: 133%;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding-right: 40px;
 }
 
 .profile-usermenu ul li a i {

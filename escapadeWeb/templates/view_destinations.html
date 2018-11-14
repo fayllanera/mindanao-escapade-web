@@ -1,7 +1,7 @@
 {% extends 'base/landing-page-base.html' %}
 {% block custom_css %}
 <!-- Custom CSS -->
-            <script>
+    <script>
     $(document).ready(function () {
         localStorage.clear();
         $('#login').submit(function () {
@@ -66,63 +66,6 @@
         var age = theBday.innerHTML = Q4A;
     }
 </script>
-      <script>
-        $(document).ready(function () {
-            $('#target').submit(function () {
-                var username = $("#username").val();
-                var password = $("#password").val();
-                var firstname = $("#fname").val();
-                var middlename = $("#mname").val();
-                var lastname = $("#lname").val();
-                var age = document.getElementById('age').innerHTML;
-                var contact = $("#number").val();
-                var address = $("#address").val();
-                var birthday = $("#bday").val();
-                $.ajax({
-                    url: "http://127.0.0.1:5000/api/register",
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify({
-                        'username':username,
-                        'password':password,
-                        'firstname':firstname,
-                        'middlename':middlename,
-                        'lastname':lastname,
-                        'age':age,
-                        'contact':contact,
-                        'address':address,
-                        'birthday':birthday,
-                    }),
-                    method: "POST",
-                    dataType: "json",
-                    crossDomain: true,
-                    success: function () {
-                        console.log("success");
-                        alert("registration success!");
-                        window.location.href='/'
-                    },
-                    error: function () {
-                        console.log('error')
-                    },
-                    complete: function (jqXHR) {
-                        if (jqXHR.status == '401') {
-                            console.log(jqXHR.status)
-                        }
-                    }
-                })
-            });
-        })
-    </script>
-    <script>
-        function submitBday() {
-                var Q4A = "";
-                var Bdate = document.getElementById('bday').value;
-                var Bday = +new Date(Bdate);
-                Q4A += "" + ~~ ((Date.now() - Bday) / (31557600000));
-                var theBday = document.getElementById('age');
-                var age = theBday.innerHTML = Q4A;
-            }
-    </script>
-
 {% endblock %}
 {% block content %}
     <div class="signin-modal modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
@@ -170,53 +113,33 @@
             </div>
         </div>
     </div>
-    <section class="page-section cta" style="background-color:whitesmoke; margin-top:0em; margin-bottom:0em;">
-          <div class="container">
-            <div class="row">
-              <div class="col-xl-9 mx-auto">
-                <div class="cta-inner text-center rounded">
-                  <h2 class="section-heading mb-4">
-                    <span class="section-heading-upper">Register</span>
-                  </h2>
-                  <form style="margin: 0 auto; width:400px;" id="target">
-                <div class="form-group">
-                    <label class="section-subheading"><i class="fa fa-user"> </i> Username</label>
-                    <input type="text" class="form-control" id="username" placeholder="Enter username">
-
-                    <br><label class="section-subheading"><i class="fa fa-lock"></i> Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Enter password">
-
-                    <br><label class="section-subheading"><i class="fa fa-user"></i> First Name</label>
-                    <input type="text" class="form-control" id="fname" placeholder="Enter first name">
-
-                    <br><label class="section-subheading"><i class="fa fa-user"></i> Middle Name</label>
-                    <input type="text" class="form-control" id="mname" placeholder="Enter last name">
-
-                    <br><label class="section-subheading"><i class="fa fa-user"></i> Last Name</label>
-                    <input type="text" class="form-control" id="lname" placeholder="Enter last name">
-
-                    <div>
-                        <br><label class="section-subheading"><i class="fa fa-calendar"></i> Date of
-                            Birth</label>
-                        <input type="date" class="form-control" id="bday" placeholder="Date of Birth"
-                                  onchange="submitBday()">
-                    </div>
-                    <p hidden id="age"></p>
-
-                    <br><label class="section-subheading"><i class="fa fa-address-card"></i> Address</label>
-                    <input type="text" class="form-control" id="address" placeholder="Enter address">
-
-                    <br><label class="section-subheading"><i class="fa fa-phone-square"></i> Contact
-                        Number</label>
-                    <input type="number" class="form-control" id="number" placeholder="Enter contact number">
-                </div>
-                <center><input type="submit" class="btn btn-primary" name="Register" value="Register" id="btn"></center>
-            </form>
-                </div>
-              </div>
+    {% for post in posts %}
+    <section class="page-section">
+      <div class="container">
+        <div class="product-item">
+          <div class="product-item-title d-flex">
+            <div class="bg-faded p-5 d-flex ml-auto rounded">
+              <h2 class="section-heading mb-0">
+                <span class="section-heading-upper"></span>
+                  <a href="/destination/{{post.name}}"><span class="section-heading-upper">Discover {{ post.location }}</span></a>
+                  <a href="/destination/{{post.name}}" style="color: initial; text-decoration: none !important;"><span class="section-heading-lower">{{ post.name }}</span></a>
+              </h2>
             </div>
           </div>
+          <img class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" style="width:1280px;
+    height: 640px;     border: 0;
+    max-width: 100%;
+    height: auto;" src="data:image;base64, {{ post.photo }}" alt="">
+          <div class="product-item-description d-flex mr-auto">
+            <div class="bg-faded p-5 rounded">
+              <div class="mb-0" style="    overflow: hidden;
+    height: 80px;">{{ post.content | safe}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
+  {% endfor %}
 {% endblock %}
 {% block custom_js %}
 <!-- CUSTOM JS -->

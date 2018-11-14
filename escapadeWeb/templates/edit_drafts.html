@@ -1,37 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Mindanao Escapade</title>
-    <!-- Bootstrap core CSS -->
-    <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="../static/js/jquery-3.3.1.min.js"></script>
-    <!-- Custom fonts for this template -->
-    <link href="../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="../static/vendor/fontawesome-free/css/fontawesome.css" rel="stylesheet" type="text/css">
-    <link href="../static/vendor/fontawesome-free/css/fontawesome.min.css" rel="stylesheet" type="text/css">
-
-    <!-- Custom styles for this template -->
-    <link href="../static/css/clean-blog.min.css" rel="stylesheet">
-    <link href="../static/plugin/fine-uploader/fine-uploader-gallery.min.css" rel="stylesheet">
-    <script>
-       $(document).ready(function () {
-                $('#type').submit(function () {
-                    var type = $(".type-select option:selected").val();
-                    alert(type);
-                    localStorage.setItem('type_selected', type);
-                    if (type == 'Region'){
-                        window.location.href='/writer/region', true;
-                    } else if (type == 'Destination') {
-                        window.location.href='/writer/destination', true;
-                    } else {
-                        window.location.href='/writer/attraction', true;
-                    }
-                    return false;
-                });
+{% extends 'base/landing-page-writer.html' %}
+{% block custom_css %}
+<!-- Custom CSS -->
+<script>
+  $(document).ready(function () {
+            var role_id = localStorage.getItem('role_id');
+            if (role_id != '2') {
+                window.location.href = '/unauthorized';
+            }
+        })
+</script>
+<script>
+   $(document).ready(function () {
+            $('#type').submit(function () {
+                var type = $(".type-select option:selected").val();
+                alert(type);
+                localStorage.setItem('type_selected', type);
+                if (type == 'Region'){
+                    window.location.href='/writer/region', true;
+                } else if (type == 'Destination') {
+                    window.location.href='/writer/destination', true;
+                } else {
+                    window.location.href='/writer/attraction', true;
+                }
+                return false;
             });
-    </script>
-    <script src="../static/plugin/fine-uploader/fine-uploader.min.js"></script>
+        })
+</script>
+<link href="{{url_for('static', filename='css/news.css')}}" rel="stylesheet">
+<link href="{{url_for('static', filename='plugin/fine-uploader/fine-uploader.min.css')}}" rel="stylesheet">
+<script src="{{url_for('static', filename='plugin/fine-uploader/fine-uploader.min.js')}}"></script>
     <script type="text/template" id="qq-template">
         <div class="qq-uploader-selector qq-uploader qq-gallery" qq-drop-area-text="Drop files here">
             <div class="qq-total-progress-bar-container-selector qq-total-progress-bar-container">
@@ -108,105 +105,90 @@
             </dialog>
         </div>
     </script>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-      <div class="container">
-        <!-- <a class="navbar-brand" href="index.html">Mindanao Escapade</a> -->
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          Menu
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="index.html">Home</a>
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" data-toggle="modal"
-               data-target="#squarespaceModal"  href="post.html">Write a Post</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">My Account</a>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="/writer/drafts">My Drafts</a>
-                  <a class="dropdown-item" href="/writer/submissions">My Submissions</a>
-                </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-    <header class="masthead" style="background-image: url('../static/img/home-bg.jpg'); background-position: center; background-repeat: no-repeat; height: 100%; padding: 35px; margin-bottom: -30%;" >
-      <div class="overlay"></div>
-      <div class="container" >
-        <div class="row">
-        </div>
-      </div>
-    </header>
-    <div class="signin-modal modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="section-heading">Select what to write</h4>
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
-                            class="sr-only">Close</span></button>
-                </div>
+      <style>
+        .qq-gallery .qq-upload-button {
+            background: #333;
+            border: #333;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+<div class="signin-modal modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="section-heading">Select what to write</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">Close</span></button>
+            </div>
 
-                <div class="modal-body">
-                    <fieldset>
-                        <div class="row">
-                            <div class="col-sm-8 col-md-12  col-md-offset-12">
-                                <form id="type">
-                                    <div class="form-group">
-                                        <select tabindex="1" class="type-select form-control">
-                                          <option value="" selected disabled hidden>Choose here</option>
-                                          <option value="Region">Region</option>
-                                          <option value="Destination">Destination</option>
-                                          <option value="Attraction">Attraction</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-xl btn-primary btn-block">Next
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+            <div class="modal-body">
+                <fieldset>
+                    <div class="row">
+                        <div class="col-sm-8 col-md-12  col-md-offset-12">
+                            <form id="type">
+                                <div class="form-group">
+                                    <select tabindex="1" class="type-select form-control">
+                                      <option value="" selected disabled hidden>Choose here</option>
+                                      <option value="Region">Region</option>
+                                      <option value="Destination">Destination</option>
+                                      <option value="Attraction">Attraction</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary btn-block">Next
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                    </fieldset>
-                </div>
+                    </div>
+                </fieldset>
             </div>
         </div>
     </div>
-    {% if submission %}
-    <div style="padding:18%;">
-        <br>
-        <div style="padding:5%; background-color:#ebeced;">
-            <h2 style="margin-top:20%;">Write a Post</h2>
-            <select class="region form-control">
-              <option value="{{  submission.name }}" selected disabled hidden>{{  submission.name }}</option>
-              <option value="Zamboanga Peninsula">Zamboanga Peninsula</option>
-              <option value="Northern Mindanao">Northern Mindanao</option>
-              <option value="Davao Region">Davao Region</option>
-              <option value="SOCCSKSARGEN">SOCCSKSARGEN</option>
-              <option value="Caraga Region">Caraga Region</option>
-              <option value="ARMM">ARMM</option>
-            </select>
-            <input style="display:none;" value="{{ submission.write_id }}" id="writeid" type="number" readonly>
-            <textarea class="tinymce" id="texteditor">{{ submission.content | safe }}</textarea>
-            <h3>Photo:</h3>
-            <img class="image image-small" style="width:100%; height:20em; margin-bottom:1em; margin-top:1em;" src="data:image;base64, {{ submission.photo }}" />
-            <div id="uploader"></div>
-            <input type="submit" class="btn" id="submiting" value="Submit" style="margin-top:3em;">
-            <input type="submit" class="btn" id="save_edit" value="Save" style="margin-top:3em;">
-            <input type="submit" class="btn" id="cancel_edit" value="Cancel" style="margin-top:3em;">
+</div>
+<section class="page-section custom" style="    padding-top: 5rem;
+    padding-bottom: 5rem; background-color: whitesmoke; margin-top:0em; margin-bottom:0em;">
+      <div class="container" style="max-width:100%;">
+        <div class="row">
+          <div class="col-xl-9 mx-auto">
+            <div class="custom-inner text-center rounded">
+              {% if submission %}
+                        <span class="section-heading-upper">Write a Post</span>
+                        <select class="region form-control">
+                          <option value="{{  submission.name }}" selected disabled hidden>{{  submission.name }}</option>
+                          <option value="Zamboanga Peninsula">Zamboanga Peninsula</option>
+                          <option value="Northern Mindanao">Northern Mindanao</option>
+                          <option value="Davao Region">Davao Region</option>
+                          <option value="SOCCSKSARGEN">SOCCSKSARGEN</option>
+                          <option value="Caraga Region">Caraga Region</option>
+                          <option value="ARMM">ARMM</option>
+                        </select>
+                        <input style="display:none;" value="{{ submission.write_id }}" id="writeid" type="number" readonly>
+                        <textarea class="tinymce" id="texteditor">{{ submission.content | safe }}</textarea>
+                        <h3>Photo:</h3>
+                        <img class="image image-small" style="width:100%; height:20em; margin-bottom:1em; margin-top:1em;" src="data:image;base64, {{ submission.photo }}" />
+                        <div id="uploader"></div>
+                        <input type="submit" class="btn" id="submiting" value="Submit" style="margin-top:3em;">
+                        <input type="submit" class="btn" id="save_edit" value="Save" style="margin-top:3em;">
+                        <input type="submit" class="btn" id="cancel_edit" value="Cancel" style="margin-top:3em;">
+                {% endif %}
+            </div>
+          </div>
         </div>
-    </div>
-    {% endif %}
-    <script>
+      </div>
+</section>
+
+
+{% endblock %}
+{% block custom_js %}
+<!-- CUSTOM JS -->
+<script>
         // Some options to pass to the uploader are discussed on the next page
         var uploader = new qq.FineUploader({
             element: document.getElementById("uploader"),
+            debug: true,
             request: {
                 endpoint: '/upload'
             },
@@ -220,11 +202,18 @@
             validation: {
                 itemLimit: 1,
                 allowedExtensions: ['jpeg', 'jpg', 'gif', 'png']
+            },
+            callbacks: {
+                onSubmit: function (id, fileName) {
+                    alert(fileName);
+                },
+                setName: function (id, name) {
+                    alert(name);
+                }
             }
-
-        })
-    </script>
-    <script>
+            })
+</script>
+<script>
         $(document).ready(function () {
         $('#submiting').click(function () {
             var content = tinymce.get("texteditor").getContent();
@@ -289,13 +278,8 @@
     })
 
     </script>
-    <script src="../static/vendor/jquery/jquery.min.js"></script>
-    <script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom scripts for this template -->
-    <script src="../static/plugin/tinymce/js/tinymce/tinymce.min.js"></script>
-    <script src="../static/plugin/tinymce/js/tinymce/init-tinymce.js"></script>
-    <script src="../static/js/getdata.js"></script>
-    <script src="../static/js/submit.js"></script>
-
-</body>
-</html>
+<script src="{{url_for('static', filename='plugin/tinymce/js/tinymce/tinymce.min.js')}}"></script>
+<script src="{{url_for('static', filename='plugin/tinymce/js/tinymce/init-tinymce.js')}}"></script>
+<script src="{{url_for('static', filename='js/getdata.js')}}"></script>
+<script src="{{url_for('static', filename='js/submit.js')}}"></script>
+{% endblock %}

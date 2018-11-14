@@ -1,0 +1,80 @@
+{% extends 'base/landing-page-admin.html' %}
+{% block custom_css %}
+{% endblock %}
+{% block content %}
+    <div class="signin-modal modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+     aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Login</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">Close</span></button>
+                </div>
+
+                <div class="modal-body">
+                    <fieldset>
+                        <div class="row">
+                            <div class="col-sm-8 col-md-12  col-md-offset-12">
+                                <form name="login" id="login" method="post" action="{{ url_for('login') }}">
+                                    <div class="form-group">
+                                        <input type="text" name="username" id="uusername" tabindex="1" class="form-control"
+                                               placeholder="Username" value="">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" name="password" id="ppassword" tabindex="2"
+                                               class="form-control" placeholder="Password">
+                                    </div>
+                                    {% with messages = get_flashed_messages() %}
+                                        {% if messages %}
+                                            <ul class=flashes>
+                                                {% for message in messages %}
+                                                    <li>{{ message }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    {% endwith %}
+                                    <div class="form-group">
+                                        <button type="submit" id="memes" class="btn btn-primary btn-block">Sign in
+                                        </button>
+                                    </div>
+                                    <a href="/register">Sign Up here!</a>
+                                </form>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% for post in posts %}
+    <section class="page-section">
+      <div class="container">
+        <div class="product-item">
+          <div class="product-item-title d-flex">
+            <div class="bg-faded p-5 d-flex ml-auto rounded">
+              <h2 class="section-heading mb-0">
+                <span class="section-heading-upper"></span>
+                  <a href="/admin/region/{{post.region_name}}"><span class="section-heading-upper">Discover {{ post.region_name }}</span></a>
+                <a href="/admin/attraction/{{post.name}}" style="color: initial; text-decoration: none !important;"><span class="section-heading-lower">{{ post.name }}</span></a>
+              </h2>
+            </div>
+          </div>
+          <img class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" style="width:1280px;
+    height: 640px;     border: 0;
+    max-width: 100%;
+    height: auto;" src="data:image;base64, {{ post.photo }}" alt="">
+          <div class="product-item-description d-flex mr-auto">
+            <div class="bg-faded p-5 rounded">
+              <div class="mb-0" style="    overflow: hidden;
+    height: 80px;">{{ post.content | safe}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  {% endfor %}
+{% endblock %}
+{% block custom_js %}
+<!-- CUSTOM JS -->
+{% endblock %}

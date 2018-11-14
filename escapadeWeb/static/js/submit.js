@@ -17,7 +17,7 @@ $(document).ready(function () {
             success: function () {
                 console.log("success");
                 alert("Submitted!");
-                window.location.href='/writer/region'
+                window.location.href='/writer'
             },
             error: function () {
                 console.log('error')
@@ -43,7 +43,7 @@ $(document).ready(function () {
             success: function () {
                 console.log("success");
                 alert("Submitted!");
-                window.location.href='/writer/region'
+                window.location.href='/writer'
             },
             error: function () {
                 console.log('error')
@@ -52,7 +52,7 @@ $(document).ready(function () {
         return false;
     });
     $('#cancel').click(function () {
-        window.location.href='/writer/region'
+        window.location.href='/writer'
         return false;
     });
 })

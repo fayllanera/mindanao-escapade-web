@@ -1,0 +1,212 @@
+{% extends 'base/landing-page-admin.html' %}
+{% block custom_css %}
+<!-- Custom CSS -->
+<link href="{{url_for('static', filename='css/jquery.dataTables.min.css')}}" rel="stylesheet">
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery.dataTables.min.js')}}"></script>
+<!--<script src="{{url_for('static', filename='js/jquery-3.3.1.min.js')}}"></script>-->
+<style type="text/css">
+    #table{
+        color: black;
+        background-color: #FCEC5F;
+        border-radius: 1%;
+        padding: 20px;
+    }
+    #table1{
+        color: black;
+        background-color: #FCEC5F;
+        border-radius: 1%;
+        padding: 20px;
+    }
+    .dataTables_wrapper{
+        font-family: 'Raleway';
+        font-weight: 500;
+        text-transform: uppercase;
+        color: #343a40;
+        font-size: 16px;
+    }
+    th{
+        font-family: 'Saira Extra Condensed', serif;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #343a40;
+        font-size: 20px;
+        width: 100px;
+    }
+    .table .thead-dark th{
+        font-family: 'Saira Extra Condensed', serif;
+        font-weight: bolder;
+        text-transform: uppercase;
+        color: black;
+    }
+    .table1 .thead-dark th{
+        font-family: 'Saira Extra Condensed', serif;
+        font-weight: bolder;
+        text-transform: uppercase;
+        color: black;
+    }
+    .table1 .thead-dark th{
+        font-family: 'Saira Extra Condensed', serif;
+        font-weight: bolder;
+        text-transform: uppercase;
+        color: black;
+    }
+    .container{
+        height: auto;
+    }
+    .container1{
+        height: auto;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<!-- Masthead -->
+    <section class="page-section cta" style="background-color:whitesmoke; margin-top:0em; margin-bottom:0em;">
+          <div class="container">
+            <div class="row">
+              <div class="col-xl-9 mx-auto">
+                <div class="cta-inner text-center rounded" style="padding:0; margin:0;">
+                  <h2 class="section-heading mb-4">
+                    <span class="section-heading-upper">Register</span>
+                  </h2>
+                    <div id="table" style="background-color: white; border-radius: 10px; margin-left:0;">
+                    <table id="maintable" class="table table-hover">
+
+                    </table>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </section>
+{% endblock %}
+{% block custom_js %}
+<!-- CUSTOM JS -->
+<script>
+    var global1;
+    var global2;
+    var global3;
+    var myTable;
+
+    var dataset2 = [];
+    $(document).ready(function () {
+
+    $.ajax({
+        url: 'http://127.0.0.1:5000/get/all/user',
+        type: "GET",
+        dataType: "json",
+        crossDomain: true,
+        success: function(resp) {
+            if (resp.status  === 'ok') {
+                for ( var i = 0; i < resp.entries.length; i++) {
+                    var dataset1 = [];
+                    dataset1.push(resp.entries[i].fullname);
+                    dataset1.push(resp.entries[i].username);
+                    dataset1.push(resp.entries[i].age);
+                    dataset1.push(resp.entries[i].contact);
+                    dataset1.push(resp.entries[i].role_id);
+                    if (resp.entries[i].role_id === '2') {
+                         dataset1.push("<button class='btn btn-success' style='padding: 2px 5px' id='promote' disabled><span  style='text-align: center'>Promote</span></button><button id='demote' class='btn btn-danger btn-xs' style='padding: 2px 6px; margin-top: 5px;'><span style: 'text-align: center'>Demote</span></button>");
+                    }
+                    if (resp.entries[i].role_id === '3') {
+                        dataset1.push("<button class='btn btn-success' style='padding: 2px 5px' id='promote'><span  style='text-align: center'>Promote</span></button><button id='demote' class='btn btn-danger btn-xs' style='padding: 2px 6px; margin-top: 5px;' disabled><span style: 'text-align: center'>Demote</span></button>");
+                    }
+                    dataset1.push(resp.entries[i].id);
+                    dataset2.push(dataset1);
+                }
+
+                myTable =  $('#maintable').DataTable({
+                    data: dataset2,
+                    columns : [
+                        {title: "Fullname"},
+                        {title: "Username"},
+                        {title: "Age"},
+                        {title: "Contact"},
+                        {title: "Role ID"},
+                        {title: "Actions"}
+                        ]
+                });
+            }
+        }
+    });
+
+    $('body').on('click', '#promote', function() {
+        var row  = $(this).parents('tr')[0];
+        data =  myTable.row(row).data();
+        global1 = data[6];
+        global3 = data[0];
+
+        promote(global1,global3);
+    });
+
+    $("body").on('click', '#demote', function () {
+        var row  = $(this).parents('tr')[0];
+        data =  myTable.row(row).data();
+        global2 = data[6];
+        global3 = data[0];
+
+        demote(global2,global3);
+    });
+    });
+
+    function promote (g,f) {
+        alert("You have Promoted the user "+f);
+        var tokens = localStorage.getItem('token');
+        var userid;
+        var response = $("#response").val();
+        $.ajax({
+            url: "http://127.0.0.1:5000/api/promotedemote",
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+
+                'userid':g,
+                'response':'yes'
+            }),
+            method: "POST",
+            dataType: "json",
+            crossDomain: true,
+            headers: {
+                'x-access-token': tokens
+            },
+            success: function (resp) {
+                alert(resp.message);
+                window.location.href='/admin/user'
+            },
+            error: function () {
+                alert('server error! click ok to reload!');
+                window.location.href='/admin/user'
+            }
+        })
+    }
+
+    function demote(g,f) {
+        alert("You have Demote "+f);
+        var tokens = localStorage.getItem('token');
+        var userid;
+        var response = $("#response").val();
+
+        $.ajax({
+            url: "http://127.0.0.1:5000/api/promotedemote",
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'userid':g,
+                'response':'no'
+            }),
+
+            method: "POST",
+            dataType: "json",
+            crossDomain: true,
+            headers: {
+                'x-access-token': tokens
+            },
+            success: function (resp) {
+                alert(resp.message);
+                window.location.href='/admin/user'
+            },
+            error: function () {
+                alert('server error! click ok to reload!');
+                window.location.href='/admin/user'
+            }
+        })
+    }
+</script>
+{% endblock %}

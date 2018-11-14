@@ -1,14 +1,32 @@
-{% extends 'base/landing-page-editor.html' %}
+{% extends 'base/landing-page-writer.html' %}
 {% block custom_css %}
 <!-- Custom CSS -->
 <script>
   $(document).ready(function () {
             var role_id = localStorage.getItem('role_id');
-            if (role_id != '2') {
+            if (role_id != '3') {
                 window.location.href = '/unauthorized';
             }
         })
 </script>
+<script>
+   $(document).ready(function () {
+            $('#type').submit(function () {
+                var type = $(".type-select option:selected").val();
+                alert(type);
+                localStorage.setItem('type_selected', type);
+                if (type == 'Region'){
+                    window.location.href='/writer/region', true;
+                } else if (type == 'Destination') {
+                    window.location.href='/writer/destination', true;
+                } else {
+                    window.location.href='/writer/attraction', true;
+                }
+                return false;
+            });
+        })
+</script>
+<link href="{{url_for('static', filename='css/news.css')}}" rel="stylesheet">
 <link href="{{url_for('static', filename='plugin/fine-uploader/fine-uploader.min.css')}}" rel="stylesheet">
 <script src="{{url_for('static', filename='plugin/fine-uploader/fine-uploader.min.js')}}"></script>
     <script type="text/template" id="qq-template">
@@ -131,150 +149,84 @@
     </div>
 </div>
 <section class="page-section custom" style="    padding-top: 5rem;
-    padding-bottom: 5rem; background-color: whitesmoke; margin-top:0em; margin-bottom:0em;">
+    padding-bottom: 5rem; background-color: transparent; margin-top:0em; margin-bottom:0em;">
       <div class="container" style="max-width:100%;">
         <div class="row">
-          <div class="col-xl-9 mx-auto">
+          <div class="col-xl-8 mx-auto">
             <div class="custom-inner text-center rounded">
-            {% if submission %}
               <h2 class="section-heading mb-4">
-                <span class="section-heading-upper">Edit a Post by {{ submission.author_name }}</span>
+                  <a href="/writer/submissions"><span class="section-heading-upper pull-left">Back to Submissions</span></a>
+                <span class="section-heading-upper">Returned Submissions</span>
               </h2>
+                {% for submission in submissions %}
+                    {%  if submission.type == 'Region' %}
+                    <form action="{{ url_for('edit_region') }}" method="post">
+                    {% elif submission.type == 'Destination' %}
+                    <form action="{{ url_for('edit_destination') }}" method="post">
+                    {% else %}
+                    <form action="{{ url_for('edit_attraction') }}" method="post">
+                    {% endif %}
+                        <input name="write" type="number" style="display:none;" value="{{ submission.write_id }}" readonly>
+                          <div class="headline-card tracked loaded" style="height: 420px;">
+                            <img class="image image-small" src="data:image;base64, {{ submission.photo }}" />
+                            <a class="gradient gradient-small" href="#" onclick="$(this).closest('form').submit()"></a>
+                            <div class="body" style="bottom:125px;">
+                              <h3>
+                                <a href="#" onclick="$(this).closest('form').submit()">{{ submission.name }}</a>
+                              </h3>
+                            </div>
 
-            <select class="region form-control" required>
-                <option value="{{ submission.region }}" selected disabled hidden>{{  submission.region }}</option>
-                {% for region in regions %}
-                <option value="{{ region.name }}">{{ region.name }}</option>
-                {%  endfor %}
-            </select>
-            <select class="destination form-control" required>
-                <option value="{{ submission.destination }}" selected disabled hidden>{{  submission.destination }} (optional)</option>
-                <option value="">(optional)</option>
-                {% for destination in destinations %}
-                <option value="{{ destination.location }}">{{ destination.location }}</option>
-                {%  endfor %}
-            </select>
-            <input type="text" name="Location" placeholder="Location" value="{{ submission.location }}" id="location_des" style="width:100.2%;" required>
-            <input type="text" name="Title" placeholder="Title" id="title_des" value="{{ submission.name }}" style="width:100.2%;" required>
-            <input style="display:none;" value="{{ submission.write_id }}" id="writeid" type="number" readonly>
-            <textarea class="tinymce" id="texteditor">{{ submission.content | safe }}</textarea>
-            <h3>Photo:</h3>
-            <img class="image image-small" style="width:100%; height:20em; margin-bottom:1em; margin-top:1em;" src="data:image;base64, {{ submission.photo }}" />
-            <input type="text" name="comment" id="comment" placeholder="Comment" style="width:100%;">
-            <input type="submit" class="btn" value="Save & Publish" style="margin-top:3em;" id="publish_attraction">
-            <input type="submit" class="btn" value="Return to User" style="margin-top:3em;" id="check_attraction">
-            {% endif %}
+                            <div class="text-preview" style="bottom:35px;">
+                              {{ submission.content | safe }}
+                                Comment:
+                                {{ submission.comment }}
+                            </div>
+                          </div>
+                    </form>
+                {% else %}
+                    <h4 style="text-align: center;">You don't have any submissions.</h4>
+                {% endfor %}
             </div>
           </div>
         </div>
       </div>
-        <div id="data-containter">
-
-        </div>
 </section>
 
 
 {% endblock %}
 {% block custom_js %}
 <!-- CUSTOM JS -->
+<script>
+        // Some options to pass to the uploader are discussed on the next page
+        var uploader = new qq.FineUploader({
+            element: document.getElementById("uploader"),
+            debug: true,
+            request: {
+                endpoint: '/upload'
+            },
+            deleteFile: {
+                enabled: true,
+                endpoint: '/delete'
+            },
+            retry: {
+               enableAuto: true
+            },
+            validation: {
+                itemLimit: 1,
+                allowedExtensions: ['jpeg', 'jpg', 'gif', 'png']
+            },
+            callbacks: {
+                onSubmit: function (id, fileName) {
+                    alert(fileName);
+                },
+                setName: function (id, name) {
+                    alert(name);
+                }
+            }
+            })
+</script>
 <script src="{{url_for('static', filename='plugin/tinymce/js/tinymce/tinymce.min.js')}}"></script>
 <script src="{{url_for('static', filename='plugin/tinymce/js/tinymce/init-tinymce.js')}}"></script>
 <script src="{{url_for('static', filename='js/getdata.js')}}"></script>
 <script src="{{url_for('static', filename='js/submit.js')}}"></script>
-<script src="{{url_for('static', filename='js/editor_view.js')}}"></script>
-    <script>
-        $(document).ready(function () {
-            $('#publish_attraction').click(function () {
-                var content = tinymce.get("texteditor").getContent();
-                var region = $(".region option:selected").val();
-                var destination = $(".destination option:selected").val();
-                var write_id = $("#writeid").val();
-                var location = $("#location_des").val();
-                var name = $("#title_des").val();
-                $.ajax({
-                    url: "http://127.0.0.1:5000/api/editor/publish/attraction",
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify({
-                        'write_id': write_id,
-                        'location' : location,
-                        'name' : name,
-                        'content':content,
-                        'region': region,
-                        'destination' : destination,
-                    }),
-                    method: "POST",
-                    dataType: "json",
-                    crossDomain: true,
-                    success: function () {
-                        console.log("success");
-                        alert("Submitted!");
-                        window.location.href='/editor/submissions'
-                    },
-                    error: function () {
-                        console.log('error')
-                    }
-                })
-                return false;
-            });
-            $('#check_attraction').click(function () {
-                var content = tinymce.get("texteditor").getContent();
-                var region = $(".region option:selected").val();
-                var write_id = $("#writeid").val();
-                var comment = $("#comment").val();
-                var location = $("#location_des").val();
-                var name = $("#title_des").val();
-                var destination = $(".destination option:selected").val();
-                $.ajax({
-                    url: "http://127.0.0.1:5000/api/editor/edit/attraction",
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify({
-                        'write_id': write_id,
-                        'location' : location,
-                        'name' : name,
-                        'content':content,
-                        'region': region,
-                        'comment': comment,
-                        'destination': destination,
-                    }),
-                    method: "POST",
-                    dataType: "json",
-                    crossDomain: true,
-                    success: function () {
-                        console.log("success");
-                        alert("Submitted!");
-                        window.location.href='/editor/submissions'
-                    },
-                    error: function () {
-                        console.log('error')
-                    }
-                })
-                return false;
-            });
-            $('#delete_attraction').click(function () {
-                var write_id = $("#writeid").val();
-                $.ajax({
-                    url: "http://127.0.0.1:5000/api/editor/delete/attraction",
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify({
-                        'write_id': write_id,
-                    }),
-                    method: "POST",
-                    dataType: "json",
-                    crossDomain: true,
-                    success: function () {
-                        console.log("success");
-                        alert("Submitted!");
-                        window.location.href='/editor/submissions'
-                    },
-                    error: function () {
-                        console.log('error')
-                    }
-                })
-                return false;
-            });
-        })
-
-
-
-    </script>
 {% endblock %}

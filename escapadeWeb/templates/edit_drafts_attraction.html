@@ -1,261 +1,189 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base/landing-page-writer.html' %}
+{% block custom_css %}
+<!-- Custom CSS -->
+<script>
+   $(document).ready(function () {
+            $('#type').submit(function () {
+                var type = $(".type-select option:selected").val();
+                alert(type);
+                localStorage.setItem('type_selected', type);
+                if (type == 'Region'){
+                    window.location.href='/writer/region', true;
+                } else if (type == 'Destination') {
+                    window.location.href='/writer/destination', true;
+                } else {
+                    window.location.href='/writer/attraction', true;
+                }
+                return false;
+            });
+        })
+</script>
+<link href="{{url_for('static', filename='css/news.css')}}" rel="stylesheet">
 
-  <head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>Mindanao Escapade</title>
-    <script src="../static/js/jquery-3.3.1.min.js"></script>
-    <!-- Bootstrap core CSS -->
-    <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom fonts for this template -->
-    <link href="../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href='../static/vendor/fontawesome-free/css/fontawesome.css' rel='stylesheet' type='text/css'>
-    <link href='../static/vendor/fontawesome-free/css/fontawesome.min.css' rel='stylesheet' type='text/css'>
-    <!-- <link href="../static/css/agency.css" rel="stylesheet"> -->
-
-    <!-- Custom styles for this template -->
-    <link href="../static/css/clean-blogT.css" rel="stylesheet">
-    <link href="../static/plugin/fine-uploader/fine-uploader-gallery.min.css" rel="stylesheet">
-    <script>
-       $(document).ready(function () {
-                $('#type').submit(function () {
-                    var type = $(".type-select option:selected").val();
-                    alert(type);
-                    localStorage.setItem('type_selected', type);
-                    if (type == 'Region'){
-                        window.location.href='/writer/region', true;
-                    } else if (type == 'Destination') {
-                        window.location.href='/writer/destination', true;
-                    } else {
-                        window.location.href='/writer/attraction', true;
-                    }
-                    return false;
-                });
-            })
-    </script>
-    <script src="../static/plugin/fine-uploader/fine-uploader.min.js"></script>
-    <script type="text/template" id="qq-template">
-        <div class="qq-uploader-selector qq-uploader qq-gallery" qq-drop-area-text="Drop files here">
-            <div class="qq-total-progress-bar-container-selector qq-total-progress-bar-container">
-                <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-total-progress-bar-selector qq-progress-bar qq-total-progress-bar"></div>
+{% endblock %}
+{% block content %}
+<div class="signin-modal modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="section-heading">Select what to write</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">Close</span></button>
             </div>
-            <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
-                <span class="qq-upload-drop-area-text-selector"></span>
-            </div>
-            <div class="qq-upload-button-selector qq-upload-button" style="width:20% !important;">
-                <div>Upload a file</div>
-            </div>
-            <span class="qq-drop-processing-selector qq-drop-processing">
-                <span>Processing dropped files...</span>
-                <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
-            </span>
-            <ul class="qq-upload-list-selector qq-upload-list" role="region" aria-live="polite" aria-relevant="additions removals">
-                <li>
-                    <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
-                    <div class="qq-progress-bar-container-selector qq-progress-bar-container">
-                        <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-progress-bar-selector qq-progress-bar"></div>
-                    </div>
-                    <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
-                    <div class="qq-thumbnail-wrapper">
-                        <img class="qq-thumbnail-selector" qq-max-size="120" qq-server-scale>
-                    </div>
-                    <button type="button" class="qq-upload-cancel-selector qq-upload-cancel">X</button>
-                    <button type="button" class="qq-upload-retry-selector qq-upload-retry">
-                        <span class="qq-btn qq-retry-icon" aria-label="Retry"></span>
-                        Retry
-                    </button>
 
-                    <div class="qq-file-info">
-                        <div class="qq-file-name">
-                            <span class="qq-upload-file-selector qq-upload-file"></span>
-                            <span class="qq-edit-filename-icon-selector qq-btn qq-edit-filename-icon" aria-label="Edit filename"></span>
+            <div class="modal-body">
+                <fieldset>
+                    <div class="row">
+                        <div class="col-sm-8 col-md-12  col-md-offset-12">
+                            <form id="type">
+                                <div class="form-group">
+                                    <select tabindex="1" class="type-select form-control">
+                                      <option value="" selected disabled hidden>Choose here</option>
+                                      <option value="Region">Region</option>
+                                      <option value="Destination">Destination</option>
+                                      <option value="Attraction">Attraction</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary btn-block">Next
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                        <input class="qq-edit-filename-selector qq-edit-filename" tabindex="0" type="text">
-                        <span class="qq-upload-size-selector qq-upload-size"></span>
-                        <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">
-                            <span class="qq-btn qq-delete-icon" aria-label="Delete"></span>
-                        </button>
-                        <button type="button" class="qq-btn qq-upload-pause-selector qq-upload-pause">
-                            <span class="qq-btn qq-pause-icon" aria-label="Pause"></span>
-                        </button>
-                        <button type="button" class="qq-btn qq-upload-continue-selector qq-upload-continue">
-                            <span class="qq-btn qq-continue-icon" aria-label="Continue"></span>
-                        </button>
                     </div>
-                </li>
-            </ul>
-
-            <dialog class="qq-alert-dialog-selector">
-                <div class="qq-dialog-message-selector"></div>
-                <div class="qq-dialog-buttons">
-                    <button type="button" class="qq-cancel-button-selector">Close</button>
-                </div>
-            </dialog>
-
-            <dialog class="qq-confirm-dialog-selector">
-                <div class="qq-dialog-message-selector"></div>
-                <div class="qq-dialog-buttons">
-                    <button type="button" class="qq-cancel-button-selector">No</button>
-                    <button type="button" class="qq-ok-button-selector">Yes</button>
-                </div>
-            </dialog>
-
-            <dialog class="qq-prompt-dialog-selector">
-                <div class="qq-dialog-message-selector"></div>
-                <input type="text">
-                <div class="qq-dialog-buttons">
-                    <button type="button" class="qq-cancel-button-selector">Cancel</button>
-                    <button type="button" class="qq-ok-button-selector">Ok</button>
-                </div>
-            </dialog>
+                </fieldset>
+            </div>
         </div>
-    </script>
-    <style>
-        .qq-gallery .qq-upload-button {
+    </div>
+</div>
+<section class="page-section custom" style="    padding-top: 5rem;
+    padding-bottom: 5rem; background-color: whitesmoke; margin-top:0em; margin-bottom:0em;">
+      <div class="container" style="max-width:100%;">
+        <div class="row">
+          <div class="col-xl-9 mx-auto">
+            <div class="custom-inner text-center rounded">
+                    <span class="section-heading-upper">Write a Post</span>
+                    <a data-toggle="dropdown" class="btn btn-info" style="font-size: 10px; background-color: transparent;
+    border-color: transparent;
+border: transparent; box-shadow:0px 0px 0px 0px; -webkit-box-shadow: 0px 0px 0px 0px;">
+                     <i class="fa fa-ellipsis-h"></i>
+                    </a>
+                      <ul class="dropdown-menu" style="float: right;
+    list-style: none outside none;
+    margin: 0;
+    min-width: 61px;
+    padding: 0;">
+                        <li>
+                            <form action="{{url_for('delete_writer')}}" method="post">
+                            <input style="display:none;" value="{{ submission.write_id }}" name="write_id" type="number" readonly>
+                            <input style="display:none;" value="Attraction" name="type" type="text" readonly>
+                            <button data-original-title="Delete" type="submit" rel="tooltip"  href="#" class="btn btn-primary" data-placement="left" style="color: #333; font-size:12px; background-color:transparent; border-color:#333;">
+                                <span class="glyphicon glyphicon-trash"></span>Delete Post
+                            </button>
+                            </form>
+                        </li>
+                      </ul>
+                    <select class="region form-control" required>
+                        <option value="{{ submission.region }}" selected disabled hidden>{{  submission.region }}</option>
+                        {% for region in regions %}
+                        <option value="{{ region.name }}">{{ region.name }}</option>
+                        {%  endfor %}
+                    </select>
+                    <select class="destination form-control">
+                        <option value="{{ submission.destination }}" selected disabled hidden>{{  submission.destination }} (optional)</option>
+                        <option value="">(optional)</option>
+                        {% for destination in destinations %}
+                        <option value="{{ destination.name }}">{{ destination.name }} ({{ destination.region_name }})</option>
+                        {%  endfor %}
+                    </select>
+                    <input type="text" name="Location" placeholder="Location" value="{{ submission.location }}" id="location_des" style="width:100.2%;" required>
+                    <input type="text" name="Title" placeholder="Title" id="title_des" value="{{ submission.name }}" style="width:100.2%;" required>
+                    <input style="display:none;" value="{{ submission.write_id }}" id="writeid" type="number" readonly>
+                    <textarea class="tinymce" id="texteditor">{{ submission.content | safe }}</textarea>
+                    <h3>Photo:</h3>
+                    <img class="image image-small" style="width:80%; margin-bottom:1em; margin-top:1em;" id="img-preview" src="{{ submission.photo }}" />
+                    <input type="submit" value="{{ submission.photo }}" id="secure_url" style="display:none;" readonly>
+                    <input type="submit" value="{{ submission.public_id }}" id="public_id" style="display:none;"  readonly>
+                    <input style="display:none;" value="{{ submission.write_id }}" id="writeid" type="number" readonly>
+                    <br>
+                    <div class="btn btn-primary" style="
+            overflow: hidden;
+            direction: ltr;
             background: #333;
-            border: #333;
-        }
-    </style>
-  </head>
-
-  <body>
-
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-xl navbar-light fixed-top" style="background-color: black; height: 10%;" id="mainNav">
-      <div class="container">
-        <a class="navbar-brand" href="index.html" style="margin-right:-20px;">Mindanao Escapade</a>
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          Menu
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
-            <div class="navbar-header">
-                <div class="nav navbar-nav navbar-right">
-                      <li>
-                          <input type="text" placeholder="Search.." name="search" style="height: 25px; font-size: 20px;">
-                          <a href="#"> <i class="fas fa-search" style="color: white; margin-right: 80px;"></i></a>
-                      </li>
-                      <li><a href="/notification" class="js-scroll-trigger" data-toggle="modal"
-                            data-target="#squarespaceModal" style="color: white;"><span style="color: white; margin-right: 25px;">Write a Post</span>
-                            <span class="badge pull-right"></span>
-                      </a></li>
-                      <li><a href="/notification" style="color: white;"><span class="fas fa-home" style="color: white; margin-right: 30px;"> </span>
-                          <span class="badge pull-right"></span>
-                      </a></li>
-                      <li><a href="/notification" style="color: white;"><span class="fas fa-bell" style="color: white; margin-right: 25px;"> </span>
-                            <span class="badge pull-right"></span>
-                      </a></li>
-                      <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: white;">
-                              <span class="fa fa-align-justify" style="color: white"></span>
-                          </a>
-                          <ul class="dropdown-menu" aria-labelledby="about-us">
-                              <li><a href="/profile/" style="color: gray">Profile</a></li>
-                              <li><a href="/writer/drafts">My Drafts</a></li>
-                              <li><a href="/writer/submissions">My Submissions</a></li>
-                              <li><a href="/logout" style="color: gray"></span>Log out</a></li>
-                          </ul>
-                      </li>
-                </div>
-          </ul>
+            border: #333; margin-top:1em;">
+                      <label class="file-upload-container" for="file-upload">
+                        <input id="file-upload" type="file" style="display:none;">
+                        Select an Image
+                      </label>
+                    </div><br>
+                    <input type="submit" class="btn" id="submiting_att" value="Submit" style="margin-top:3em;">
+                    <input type="submit" class="btn" id="save_edit_att" value="Save" style="margin-top:3em;">
+                    <input type="submit" class="btn" id="cancel_edit" value="Cancel" style="margin-top:3em;">
+            </div>
+          </div>
         </div>
       </div>
-    </nav>
-    <div class="signin-modal modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="section-heading">Select what to write</h4>
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
-                            class="sr-only">Close</span></button>
-                </div>
+</section>
 
-                <div class="modal-body">
-                    <fieldset>
-                        <div class="row">
-                            <div class="col-sm-8 col-md-12  col-md-offset-12">
-                                <form id="type">
-                                    <div class="form-group">
-                                        <select tabindex="1" class="type-select form-control">
-                                          <option value="" selected disabled hidden>Choose here</option>
-                                          <option value="Region">Region</option>
-                                          <option value="Destination">Destination</option>
-                                          <option value="Attraction">Attraction</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="submit" style="background-color: #333; border-color:#333;" class="btn btn-xl btn-primary btn-block">Next
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Page Header -->
-    {% if submission %}
-    <div style="padding:2% 5% 5% 5%;">
-        <br>
-        <div style="padding:5%; background-color:#ebeced;">
-            <h2>Write a Post</h2>
-            <select class="region form-control" required>
-                <option value="{{ submission.region }}" selected disabled hidden>{{  submission.region }}</option>
-                {% for region in regions %}
-                <option value="{{ region.name }}">{{ region.name }}</option>
-                {%  endfor %}
-            </select>
-            <select class="destination form-control">
-                <option value="{{ submission.destination }}" selected disabled hidden>{{  submission.destination }} (optional)</option>
-                <option value="">(optional)</option>
-                {% for destination in destinations %}
-                <option value="{{ destination.name }}">{{ destination.name }} ({{ destination.region_name }})</option>
-                {%  endfor %}
-            </select>
-            <input type="text" name="Location" placeholder="Location" value="{{ submission.location }}" id="location_des" style="width:100.2%;" required>
-            <input type="text" name="Title" placeholder="Title" id="title_des" value="{{ submission.name }}" style="width:100.2%;" required>
-            <input style="display:none;" value="{{ submission.write_id }}" id="writeid" type="number" readonly>
-            <textarea class="tinymce" id="texteditor">{{ submission.content | safe }}</textarea>
-            <h3>Photo:</h3>
-            <img class="image image-small" style="width:100%; height:20em; margin-bottom:1em; margin-top:1em;" src="data:image;base64, {{ submission.photo }}" />
-            <div id="uploader"></div>
-            <input type="submit" class="btn" id="submiting_att" value="Submit" style="margin-top:3em;">
-            <input type="submit" class="btn" id="save_edit_att" value="Save" style="margin-top:3em;">
-            <input type="submit" class="btn" id="cancel_edit" value="Cancel" style="margin-top:3em;">
-        </div>
-    </div>
-    {% endif %}
-    <script>
-        // Some options to pass to the uploader are discussed on the next page
-        var uploader = new qq.FineUploader({
-            element: document.getElementById("uploader"),
-            request: {
-                endpoint: '/upload'
+
+{% endblock %}
+{% block custom_js %}
+<!-- CUSTOM JS -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    var CLOUDINARY_URL =  'https://api.cloudinary.com/v1_1/diit9i4hz/image/upload';
+var CLOUDINARY_UPLOAD_PRESET = 'irbltunb';
+
+var imgPreview = document.getElementById('img-preview');
+var fileUpload = document.getElementById('file-upload');
+var secureURL = document.getElementById('secure_url');
+var publicId = document.getElementById('public_id');
+
+fileUpload.addEventListener('change', function(event) {
+    var file = event.target.files[0];
+    var formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+
+    axios({
+        url: CLOUDINARY_URL,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: formData
+    }).then(function(res) {
+        $.ajax({
+            url: "http://127.0.0.1:5000/api/writer/upload",
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'public_id': res.data.public_id,
+                'secure_url': res.data.secure_url,
+                'url': res.data.url,
+            }),
+            method: "POST",
+            dataType: "json",
+            crossDomain: true,
+            success: function () {
+                console.log("success");
+                alert("Submitted!");
             },
-            deleteFile: {
-                enabled: true,
-                endpoint: '/delete'
-            },
-            retry: {
-               enableAuto: true
-            },
-            validation: {
-                itemLimit: 1,
-                allowedExtensions: ['jpeg', 'jpg', 'gif', 'png']
+            error: function () {
+                console.log('error')
             }
+        });
+        console.log(res);
+        imgPreview.src = res.data.secure_url;
+        secureURL.value = res.data.secure_url;
+        publicId.value = res.data.public_id;
+        localStorage.setItem('public_id', res.data.public_id);
+    }).catch(function(err) {
+        console.log(err);
+    });
 
-        })
-    </script>
+});
+</script>
     <script>
         $(document).ready(function () {
         $('#submiting_att').click(function () {
@@ -266,6 +194,7 @@
             var destination = $(".destination option:selected").val();
             var location = $("#location_des").val();
             var title = $("#title_des").val();
+            var public_id = $("#public_id").val();
             $.ajax({
                 url: "http://127.0.0.1:5000/api/writer/submit/draft-attraction",
                 contentType: 'application/json; charset=utf-8',
@@ -277,6 +206,7 @@
                     'write_id' : write_id,
                     'location' : location,
                     'name' : title,
+                    'public_id' : public_id,
                 }),
                 method: "POST",
                 dataType: "json",
@@ -284,7 +214,7 @@
                 success: function () {
                     console.log("success");
                     alert("Submitted!");
-                    window.location.href='/writer/region'
+                    window.location.href='/writer'
                 },
                 error: function () {
                     console.log('error')
@@ -300,6 +230,7 @@
             var username = localStorage.getItem('user');
             var location = $("#location_des").val();
             var title = $("#title_des").val();
+            var public_id = $("#public_id").val();
             $.ajax({
                 url: "http://127.0.0.1:5000/api/writer/edit/attraction",
                 contentType: 'application/json; charset=utf-8',
@@ -311,6 +242,7 @@
                     'write_id' : write_id,
                     'location' : location,
                     'name' : title,
+                    'public_id' : public_id,
                 }),
                 method: "POST",
                 dataType: "json",
@@ -318,7 +250,7 @@
                 success: function () {
                     console.log("success");
                     alert("Submitted!");
-                    window.location.href='/writer/region'
+                    window.location.href='/writer'
                 },
                 error: function () {
                     console.log('error')
@@ -327,22 +259,14 @@
             return false;
         });
         $('#cancel_edit').click(function () {
-            window.location.href='/writer/region'
+            window.location.href='/writer'
             return false;
         });
     })
 
     </script>
-    <script src="../static/vendor/jquery/jquery.min.js"></script>
-    <script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom scripts for this template -->
-    <script src="../static/plugin/tinymce/js/tinymce/tinymce.min.js"></script>
-    <script src="../static/plugin/tinymce/js/tinymce/init-tinymce.js"></script>
-    <script src="../static/js/jquery-3.3.1.min.js"></script>
-    <script src="../static/js/getdata.js"></script>
-    <script src="../static/js/editor_view.js"></script>
-    <script src="../static/js/submit.js"></script>
-
-  </body>
-
-</html>
+<script src="{{url_for('static', filename='plugin/tinymce/js/tinymce/tinymce.min.js')}}"></script>
+<script src="{{url_for('static', filename='plugin/tinymce/js/tinymce/init-tinymce.js')}}"></script>
+<script src="{{url_for('static', filename='js/getdata.js')}}"></script>
+<script src="{{url_for('static', filename='js/submit.js')}}"></script>
+{% endblock %}

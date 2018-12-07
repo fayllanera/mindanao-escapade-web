@@ -1,0 +1,84 @@
+{% extends 'base/landing-page-normal.html' %}
+{% block custom_css %}
+    <link href="../static/css/profile.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+    <!-- Profile -->
+    <div class="container">
+      <div class="row profile">
+        <div class="col-md-3">
+          <div class="profile-sidebar">
+            <!-- SIDEBAR USERPIC -->
+              <div class="profile-userpic">
+                <img src="../static/img/2.jpg" class="img-responsive" style="margin-left: 60px;">
+              </div>
+            <!-- END SIDEBAR USERPIC -->
+            <!-- SIDEBAR USER TITLE -->
+          <div class="profile-usertitle">
+          <div class="profile-usertitle-name">
+
+          </div>
+          <div class="profile-usertitle-job">
+
+          </div>
+        </div>
+        <!-- END SIDEBAR USER TITLE -->
+        <!-- SIDEBAR BUTTONS -->
+        <!-- <div class="profile-userbuttons">
+          <button type="button" class="btn btn-success btn-sm">Follow</button>
+          <button type="button" class="btn btn-danger btn-sm">Message</button>
+        </div> -->
+        <!-- END SIDEBAR BUTTONS -->
+        <!-- SIDEBAR MENU -->
+        <div class="profile-usermenu">
+          <ul class="nav">
+              <li>
+                  <a href="info" class="btn btn-sm btn-block btn-success">
+                    <i class="ace-icon fa fa-user bigger-120"></i>
+                    <span class="bigger-110">Info</span>
+                  </a>
+                  <a href="mypost" class="btn btn-sm btn-block btn-success" >
+                    <i class="ace-icon fa fa-home bigger-120"></i>
+                    <span class="bigger-110">Post</span>
+                  </a>
+                  <a href="#" class="btn btn-sm btn-block btn-success">
+                    <i class="ace-icon fa fa-list-alt bigger-120"></i>
+                    <span class="bigger-110">Activity Logs</span>
+                  </a>
+              </li>
+          </ul>
+        </div>
+        <!-- END MENU -->
+      </div>
+    </div>
+
+    <div class="col-md-9">
+            <div class="profile-content" style="color:black">
+                     {% if posts %}
+                    {% for post in posts %}
+                    <div class="post-preview">
+                    <a href="#">
+                    <img style="width: 100%;
+    height: 640px;" src="{{ post.photo }}" />
+                <h2 class="post-title">
+                    {{ post.name }}
+                </h2>
+                <h3 class="post-subtitle">
+                    {{ post.content | safe }}
+                </h3>
+                </a>
+                <p class="post-meta">Posted by {{ post.author }} on {{ post.date }}</p>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+              <!-- <img src="../static/img/post-sample-image.jpg" style="background-position: center; background-repeat: no-repeat; height: 50%; width: 60%; margin-left: 100px;  margin-top: 0%;">  -->
+            </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+{% block custom_js %}
+<!-- CUSTOM JS -->
+{% endblock %}

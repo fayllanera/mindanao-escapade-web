@@ -1,0 +1,400 @@
+{% extends 'base/landing-page-writer.html' %}
+{% block custom_css %}
+<!-- Custom CSS -->
+<script>
+  $(document).ready(function () {
+            var role_id = localStorage.getItem('role_id');
+            if (role_id != '3') {
+                window.location.href = '/unauthorized';
+            }
+        })
+</script>
+<script>
+   $(document).ready(function () {
+            $('#type').submit(function () {
+                var type = $(".type-select option:selected").val();
+                alert(type);
+                localStorage.setItem('type_selected', type);
+                if (type == 'Region'){
+                    window.location.href='/writer/region', true;
+                } else if (type == 'Destination') {
+                    window.location.href='/writer/destination', true;
+                } else {
+                    window.location.href='/writer/attraction', true;
+                }
+                return false;
+            });
+        })
+</script>
+<link href="{{url_for('static', filename='plugin/fine-uploader/fine-uploader.min.css')}}" rel="stylesheet">
+<script src="{{url_for('static', filename='plugin/fine-uploader/fine-uploader.min.js')}}"></script>
+    <script type="text/template" id="qq-template">
+        <div class="qq-uploader-selector qq-uploader qq-gallery" qq-drop-area-text="Drop files here">
+            <div class="qq-total-progress-bar-container-selector qq-total-progress-bar-container">
+                <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-total-progress-bar-selector qq-progress-bar qq-total-progress-bar"></div>
+            </div>
+            <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
+                <span class="qq-upload-drop-area-text-selector"></span>
+            </div>
+            <div class="qq-upload-button-selector qq-upload-button" style="width:20% !important;">
+                <div>Upload a file</div>
+            </div>
+            <span class="qq-drop-processing-selector qq-drop-processing">
+                <span>Processing dropped files...</span>
+                <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
+            </span>
+            <ul class="qq-upload-list-selector qq-upload-list" role="region" aria-live="polite" aria-relevant="additions removals">
+                <li>
+                    <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
+                    <div class="qq-progress-bar-container-selector qq-progress-bar-container">
+                        <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-progress-bar-selector qq-progress-bar"></div>
+                    </div>
+                    <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
+                    <div class="qq-thumbnail-wrapper">
+                        <img class="qq-thumbnail-selector" qq-max-size="120" qq-server-scale>
+                    </div>
+                    <button type="button" class="qq-upload-cancel-selector qq-upload-cancel">X</button>
+                    <button type="button" class="qq-upload-retry-selector qq-upload-retry">
+                        <span class="qq-btn qq-retry-icon" aria-label="Retry"></span>
+                        Retry
+                    </button>
+
+                    <div class="qq-file-info">
+                        <div class="qq-file-name">
+                            <span class="qq-upload-file-selector qq-upload-file"></span>
+                            <span class="qq-edit-filename-icon-selector qq-btn qq-edit-filename-icon" aria-label="Edit filename"></span>
+                        </div>
+                        <input class="qq-edit-filename-selector qq-edit-filename" tabindex="0" type="text">
+                        <span class="qq-upload-size-selector qq-upload-size"></span>
+                        <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">
+                            <span class="qq-btn qq-delete-icon" aria-label="Delete"></span>
+                        </button>
+                        <button type="button" class="qq-btn qq-upload-pause-selector qq-upload-pause">
+                            <span class="qq-btn qq-pause-icon" aria-label="Pause"></span>
+                        </button>
+                        <button type="button" class="qq-btn qq-upload-continue-selector qq-upload-continue">
+                            <span class="qq-btn qq-continue-icon" aria-label="Continue"></span>
+                        </button>
+                    </div>
+                </li>
+            </ul>
+
+            <dialog class="qq-alert-dialog-selector">
+                <div class="qq-dialog-message-selector"></div>
+                <div class="qq-dialog-buttons">
+                    <button type="button" class="qq-cancel-button-selector">Close</button>
+                </div>
+            </dialog>
+
+            <dialog class="qq-confirm-dialog-selector">
+                <div class="qq-dialog-message-selector"></div>
+                <div class="qq-dialog-buttons">
+                    <button type="button" class="qq-cancel-button-selector">No</button>
+                    <button type="button" class="qq-ok-button-selector">Yes</button>
+                </div>
+            </dialog>
+
+            <dialog class="qq-prompt-dialog-selector">
+                <div class="qq-dialog-message-selector"></div>
+                <input type="text">
+                <div class="qq-dialog-buttons">
+                    <button type="button" class="qq-cancel-button-selector">Cancel</button>
+                    <button type="button" class="qq-ok-button-selector">Ok</button>
+                </div>
+            </dialog>
+        </div>
+    </script>
+      <style>
+        .qq-gallery .qq-upload-button {
+            background: #333;
+            border: #333;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+<div class="signin-modal modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="section-heading">Select what to write</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">Close</span></button>
+            </div>
+
+            <div class="modal-body">
+                <fieldset>
+                    <div class="row">
+                        <div class="col-sm-8 col-md-12  col-md-offset-12">
+                            <form id="type">
+                                <div class="form-group">
+                                    <select tabindex="1" class="type-select form-control">
+                                      <option value="" selected disabled hidden>Choose here</option>
+                                      <option value="Region">Region</option>
+                                      <option value="Destination">Destination</option>
+                                      <option value="Attraction">Attraction</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary btn-block">Next
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="page-section custom" style="    padding-top: 5rem;
+    padding-bottom: 5rem; background-color: whitesmoke; margin-top:0em; margin-bottom:0em;">
+      <div class="container" style="max-width:100%;">
+        <div class="row">
+          <div class="col-xl-9 mx-auto">
+            <div class="custom-inner text-center rounded">
+              <h2 class="section-heading mb-4">
+                <span class="section-heading-upper">Write a Post</span>
+              </h2>
+              {% if submission %}
+                <select class="region form-control" required>
+                    <option value="{{ submission.region }}" selected disabled hidden>{{  submission.region }}</option>
+                    {% for region in regions %}
+                    <option value="{{ region.name }}">{{ region.name }}</option>
+                    {%  endfor %}
+                </select>
+                <select class="destination form-control" required>
+                    <option value="{{ submission.destination }}" selected disabled hidden>{{  submission.destination }} (optional)</option>
+                    {% for destination in destinations %}
+                    <option value="{{ destination.location }}">{{ destination.location }}</option>
+                    {%  endfor %}
+                </select>
+                <input type="text" name="Location" placeholder="Location" value="{{ submission.location }}" id="location_des" style="width:100.2%;" required>
+                <input type="text" name="Title" placeholder="Title" id="title_des" value="{{ submission.name }}" style="width:100.2%;" required>
+                <textarea class="tinymce" id="texteditor">{{ submission.content | safe }}</textarea>
+                <h3>Photo:</h3>
+                <img class="image image-small" style="width:80%; margin-bottom:1em; margin-top:1em;" id="img-preview" src="{{ submission.photo }}" />
+                <input type="submit" value="{{ submission.photo }}" id="secure_url" style="display:none;" readonly>
+                <input type="submit" value="{{ submission.public_id }}" id="public_id" style="display:none;"  readonly>
+                <input style="display:none;" value="{{ submission.write_id }}" id="writeid" type="number" readonly>
+                <br>
+                <div class="btn btn-primary" style="
+        overflow: hidden;
+        direction: ltr;
+        background: #333;
+        border: #333; margin-top:1em;">
+                  <label class="file-upload-container" for="file-upload">
+                    <input id="file-upload" type="file" style="display:none;">
+                    Select an Image
+                  </label>
+                </div>
+                <br>
+                {% if submission.status == 'Checked' %}
+                <h5>Comment: {{ submission.comment }}</h5>
+                <input type="submit" class="btn" id="submit_attraction" value="Submit" style="margin-top:3em;">
+                <input type="submit" class="btn" id="draft_attraction" value="Save to Draft" style="margin-top:3em;">
+                <input type="submit" class="btn" id="cancel" value="Cancel" style="margin-top:3em;">
+                {% else %}
+                <input type="submit" class="btn" id="save_edit_destination" value="Save" style="margin-top:3em;">
+                <input type="submit" class="btn" id="cancel_edit" value="Cancel" style="margin-top:3em;">
+                {% endif %}
+                {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+        <div id="data-containter">
+
+        </div>
+</section>
+
+
+{% endblock %}
+{% block custom_js %}
+<!-- CUSTOM JS -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    var CLOUDINARY_URL =  'https://api.cloudinary.com/v1_1/diit9i4hz/image/upload';
+var CLOUDINARY_UPLOAD_PRESET = 'irbltunb';
+
+var imgPreview = document.getElementById('img-preview');
+var fileUpload = document.getElementById('file-upload');
+var secureURL = document.getElementById('secure_url');
+var publicId = document.getElementById('public_id');
+
+fileUpload.addEventListener('change', function(event) {
+    var file = event.target.files[0];
+    var formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+
+    axios({
+        url: CLOUDINARY_URL,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: formData
+    }).then(function(res) {
+        $.ajax({
+            url: "http://127.0.0.1:5000/api/writer/upload",
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'public_id': res.data.public_id,
+                'secure_url': res.data.secure_url,
+                'url': res.data.url,
+            }),
+            method: "POST",
+            dataType: "json",
+            crossDomain: true,
+            success: function () {
+                console.log("success");
+                alert("Submitted!");
+            },
+            error: function () {
+                console.log('error')
+            }
+        });
+        console.log(res);
+        imgPreview.src = res.data.secure_url;
+        secureURL.value = res.data.secure_url;
+        publicId.value = res.data.public_id;
+        localStorage.setItem('public_id', res.data.public_id);
+    }).catch(function(err) {
+        console.log(err);
+    });
+
+});
+</script>
+<script>
+        $(document).ready(function () {
+        $('#save_edit_destination').click(function () {
+            var content = tinymce.get("texteditor").getContent();
+            var region = $(".region option:selected").val();
+            var destination = $(".destination option:selected").val();
+            var write_id = $("#writeid").val();
+            var public_id = $("#public_id").val();
+            var location = $("#location_des").val();
+            var name = $("#title_des").val();
+            var username = localStorage.getItem('user');
+            $.ajax({
+                url: "http://127.0.0.1:5000/api/writer/edit/attraction",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    'username': username,
+                    'content':content,
+                    'region': region,
+                    'destination': destination,
+                    'name' : name,
+                    'location' : location,
+                    'write_id' : write_id,
+                    'public_id' : public_id,
+                }),
+                method: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function () {
+                    console.log("success");
+                    alert("Submitted!");
+                    window.location.href='/writer/submissions'
+                },
+                error: function () {
+                    console.log('error')
+                }
+            })
+            return false;
+        });
+        $('#cancel_edit').click(function () {
+            window.location.href='/writer/submissions'
+            return false;
+        });
+    })
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#submit_attraction').click(function () {
+                var content = tinymce.get("texteditor").getContent();
+                var region = $(".region option:selected").val();
+                var destination = $(".destination option:selected").val();
+                var name = $("#title_des").val();
+                var username = localStorage.getItem('user')
+                var location = $("#location_des").val();
+                var write_id = $("#writeid").val();
+                var public_id = $("#public_id").val();
+                var write_id = $("#writeid").val();
+                $.ajax({
+                    url: "http://127.0.0.1:5000/api/writer/submit/attraction2",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        'username': username,
+                        'content':content,
+                        'destination' : destination,
+                        'region': region,
+                        'name' : name,
+                        'location' : location,
+                        'write_id' : write_id,
+                        'public_id' : public_id,
+                        'write_id' : write_id,
+                    }),
+                    method: "POST",
+                    dataType: "json",
+                    crossDomain: true,
+                    success: function () {
+                        console.log("success");
+                        alert("Submitted!");
+                        window.location.href='/writer'
+                    },
+                    error: function () {
+                        console.log('error')
+                    }
+                })
+                return false;
+            });
+            $('#draft_attraction').click(function () {
+                var content = tinymce.get("texteditor").getContent();
+                var region = $(".region option:selected").val();
+                var name = $("#title_des").val();
+                var username = localStorage.getItem('user')
+                var location = $("#location_des").val();
+                var destination = $(".destination option:selected").val();
+                var public_id = $("#public_id").val();
+                var write_id = $("#writeid").val();
+                $.ajax({
+                    url: "http://127.0.0.1:5000/api/writer/draft/attraction2",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        'username': username,
+                        'content':content,
+                        'region': region,
+                        'destination' : destination,
+                        'name' : name,
+                        'location' : location,
+                        'public_id' : public_id,
+                        'write_id' : write_id,
+                    }),
+                    method: "POST",
+                    dataType: "json",
+                    crossDomain: true,
+                    success: function () {
+                        console.log("success");
+                        alert("Submitted!");
+                        window.location.href='/writer'
+                    },
+                    error: function () {
+                        console.log('error')
+                    }
+                })
+                return false;
+            });
+            $('#cancel').click(function () {
+                window.location.href='/writer';
+                return false;
+            });
+        });
+    </script>
+<script src="{{url_for('static', filename='plugin/tinymce/js/tinymce/tinymce.min.js')}}"></script>
+<script src="{{url_for('static', filename='plugin/tinymce/js/tinymce/init-tinymce.js')}}"></script>
+<script src="{{url_for('static', filename='js/getdata.js')}}"></script>
+<script src="{{url_for('static', filename='js/submit.js')}}"></script>
+{% endblock %}

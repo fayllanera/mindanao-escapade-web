@@ -1,0 +1,63 @@
+{% extends 'base/landing-page-writer.html' %}
+{% block custom_css %}
+<!-- Custom CSS -->
+<script>
+  $(document).ready(function () {
+            var role_id = localStorage.getItem('role_id');
+            if (role_id != '3') {
+                window.location.href = '/unauthorized';
+            }
+        })
+</script>
+<script>
+   $(document).ready(function () {
+            $('#type').submit(function () {
+                var type = $(".type-select option:selected").val();
+                alert(type);
+                localStorage.setItem('type_selected', type);
+                if (type == 'Region'){
+                    window.location.href='/writer/region', true;
+                } else if (type == 'Destination') {
+                    window.location.href='/writer/destination', true;
+                } else {
+                    window.location.href='/writer/attraction', true;
+                }
+                return false;
+            });
+        })
+</script>
+{% endblock %}
+{% block content %}
+    {% if post %}
+    <section class="page-section about-heading">
+          <div class="container">
+            <img class="img-fluid rounded about-heading-img mb-3 mb-lg-0" style="width: 1280px;
+    height: 640px;     border: 0;
+    max-width: 100%;
+    height: auto;" src="{{ post.photo }}" alt="">
+            <div class="about-heading-content">
+              <div class="row">
+                <div class="col-xl-9 col-lg-10 mx-auto">
+                  <div class="bg-faded rounded p-5">
+                    <h2 class="section-heading mb-4">
+                    {% if post.type == 'Region' %}
+                      <span class="section-heading-upper">Region</span>
+                    {% elif post.type == 'Destination' %}
+                        <a href="/writer/region/{{post.region_name}}"><span class="section-heading-upper">Discover {{ post.region_name }}</span></a>
+                    {% elif post.type == 'Attraction' %}
+                        <a href="/writer/region/{{post.region_name}}"><span class="section-heading-upper">Discover {{ post.region_name }}</span></a>
+                    {% endif %}
+                      <span class="section-heading-lower">{{ post.name }}</span>
+                    </h2>
+                    {{ post.content | safe}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+    {% endif %}
+{% endblock %}
+{% block custom_js %}
+<!-- CUSTOM JS -->
+{% endblock %}

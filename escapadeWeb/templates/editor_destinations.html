@@ -1,0 +1,62 @@
+{% extends 'base/landing-page-editor.html' %}
+{% block custom_css %}
+<!-- Custom CSS -->
+
+{% endblock %}
+{% block content %}
+    {% for post in posts %}
+    <section class="page-section">
+      <div class="container">
+        <div class="product-item">
+          <div class="product-item-title d-flex">
+            <div class="bg-faded p-5 d-flex ml-auto rounded">
+              <h2 class="section-heading mb-0">
+                <span class="section-heading-upper"></span>
+                  <span class="section-heading-upper"><a href="/editor/destination/{{post.name}}">Discover {{ post.location }}</a><div class="btn-group" style="display: inline-block;
+    font-size: 0;
+    position: relative;
+    vertical-align: middle;
+    white-space: nowrap; margin-left:1em;">
+                      <a data-toggle="dropdown" class="btn btn-info" style="font-size: 10px; background-color: transparent;
+    border-color: transparent;
+    border: transparent; box-shadow:0px 0px 0px 0px; -webkit-box-shadow: 0px 0px 0px 0px;">
+                         <i class="fa fa-ellipsis-h"></i>
+                    </a>
+                      <ul class="dropdown-menu" style="float: right;
+    list-style: none outside none;
+    margin: 0;
+    min-width: 61px;
+    padding: 0;">
+        				<li>
+    					    <form action="{{url_for('delete_post')}}" method="post">
+                            <input style="display:none;" value="{{ post.write_id }}" name="write_id" type="number" readonly>
+                            <input style="display:none;" value="Destination" name="type" type="text" readonly>
+    					    <button data-original-title="Delete" type="submit" rel="tooltip"  href="#" class="btn btn-primary" data-placement="left" style="color: #333; font-size:12px; background-color:transparent; border-color:#333;">
+								<span class="glyphicon glyphicon-trash"></span>Delete Post
+							</button>
+                            </form>
+    					</li>
+                      </ul>
+                      </div></span>
+                  <a href="/editor/destination/{{post.name}}" style="color: initial; text-decoration: none !important;"><span class="section-heading-lower">{{ post.name }}</span></a>
+              </h2>
+            </div>
+          </div>
+          <img class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" style="width:1280px;
+    height: 640px;     border: 0;
+    max-width: 100%;
+    height: auto;" src="{{ post.photo }}" alt="">
+          <div class="product-item-description d-flex mr-auto">
+            <div class="bg-faded p-5 rounded">
+              <div class="mb-0" style="    overflow: hidden;
+    height: 80px;">{{ post.content | safe}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  {% endfor %}
+{% endblock %}
+{% block custom_js %}
+<!-- CUSTOM JS -->
+{% endblock %}

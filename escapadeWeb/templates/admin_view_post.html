@@ -9,7 +9,7 @@
             <img class="img-fluid rounded about-heading-img mb-3 mb-lg-0" style="width: 1280px;
     height: 640px;     border: 0;
     max-width: 100%;
-    height: auto;" src="data:image;base64, {{ post.photo }}" alt="">
+    height: auto;" src="{{ post.photo }}" alt="">
             <div class="about-heading-content">
               <div class="row">
                 <div class="col-xl-9 col-lg-10 mx-auto">
@@ -34,7 +34,7 @@
         				<li>
     					    <form action="{{url_for('delete_post_admin')}}" method="post">
                             <input style="display:none;" value="{{ post.write_id }}" name="write_id" type="number" readonly>
-                            <input style="display:none;" value="Region" name="type" type="number" readonly>
+                            <input style="display:none;" value="Region" name="type" type="text" readonly>
     					    <button data-original-title="Delete" type="submit" rel="tooltip"  href="#" class="btn btn-primary" data-placement="left" style="color: #333; font-size:12px; background-color:transparent; border-color:#333;">
 								<span class="glyphicon glyphicon-trash"></span>Delete Post
 							</button>
@@ -61,7 +61,7 @@
         				<li>
     					    <form action="{{url_for('delete_post_admin')}}" method="post">
                             <input style="display:none;" value="{{ post.write_id }}" name="write_id" type="number" readonly>
-                            <input style="display:none;" value="Destination" name="type" type="number" readonly>
+                            <input style="display:none;" value="Destination" name="type" type="text" readonly>
     					    <button data-original-title="Delete" type="submit" rel="tooltip"  href="#" class="btn btn-primary" data-placement="left" style="color: #333; font-size:12px; background-color:transparent; border-color:#333;">
 								<span class="glyphicon glyphicon-trash"></span>Delete Post
 							</button>
@@ -88,7 +88,7 @@
         				<li>
     					    <form action="{{url_for('delete_post_admin')}}" method="post">
                             <input style="display:none;" value="{{ post.write_id }}" name="write_id" type="number" readonly>
-                            <input style="display:none;" value="Attraction" name="type" type="number" readonly>
+                            <input style="display:none;" value="Attraction" name="type" type="text" readonly>
     					    <button data-original-title="Delete" type="submit" rel="tooltip"  href="#" class="btn btn-primary" data-placement="left" style="color: #333; font-size:12px; background-color:transparent; border-color:#333;">
 								<span class="glyphicon glyphicon-trash"></span>Delete Post
 							</button>

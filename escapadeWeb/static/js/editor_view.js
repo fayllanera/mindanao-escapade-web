@@ -1,4 +1,4 @@
-$(document).ready(function () {
+var user = localStorage.getItem('user');
     $('#publish').click(function () {
         var content = tinymce.get("texteditor").getContent();
         var region = $(".region option:selected").val();
@@ -10,6 +10,7 @@ $(document).ready(function () {
                 'write_id': write_id,
                 'content':content,
                 'region': region,
+                'username': user,
             }),
             method: "POST",
             dataType: "json",
@@ -17,7 +18,7 @@ $(document).ready(function () {
             success: function () {
                 console.log("success");
                 alert("Submitted!");
-                window.location.href='/editor/submissions'
+                window.location.href='/editor/submissions/1'
             },
             error: function () {
                 console.log('error')
@@ -38,6 +39,7 @@ $(document).ready(function () {
                 'content':content,
                 'region': region,
                 'comment': comment,
+                'username': user,
             }),
             method: "POST",
             dataType: "json",
@@ -45,7 +47,7 @@ $(document).ready(function () {
             success: function () {
                 console.log("success");
                 alert("Submitted!");
-                window.location.href='/editor/submissions'
+                window.location.href='/editor/submissions/1'
             },
             error: function () {
                 console.log('error')
@@ -67,7 +69,7 @@ $(document).ready(function () {
             success: function () {
                 console.log("success");
                 alert("Submitted!");
-                window.location.href='/editor/submissions'
+                window.location.href='/editor/submissions/1'
             },
             error: function () {
                 console.log('error')
@@ -75,6 +77,6 @@ $(document).ready(function () {
         })
         return false;
     });
-})
+
 
 

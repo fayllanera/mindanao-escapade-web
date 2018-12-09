@@ -158,7 +158,7 @@
                           </a>
                           <ul class="dropdown-menu" aria-labelledby="about-us">
                               <li><a href="/profile/" style="color: gray">Profile</a></li>
-                              <li><a href="/writer/drafts">My Drafts</a></li>
+                              <li><a href="/writer/drafts/1">My Drafts</a></li>
                               <li><a href="/writer/submissions">My Submissions</a></li>
                               <li><a href="/logout" style="color: gray"></span>Log out</a></li>
                           </ul>
@@ -221,7 +221,7 @@
             <input style="display:none;" value="{{ submission.write_id }}" id="writeid" type="number" readonly>
             <textarea class="tinymce" id="texteditor">{{ submission.content | safe }}</textarea>
             <h3>Photo:</h3>
-            <img class="image image-small" style="width:100%; height:20em; margin-bottom:1em; margin-top:1em;" src="data:image;base64, {{ submission.photo }}" />
+            <img class="image image-small" style="width:100%; height:20em; margin-bottom:1em; margin-top:1em;" src="{{ submission.photo }}" />
             <div id="uploader"></div>
             <input type="submit" class="btn" id="save_edit" value="Save" style="margin-top:3em;">
             <input type="submit" class="btn" id="cancel_edit" value="Cancel" style="margin-top:3em;">

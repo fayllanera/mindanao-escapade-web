@@ -111,6 +111,7 @@
         }
     </style>
 {% endblock %}
+{% block notification %}     <li class="dropdown" style="width:15px; height:15px; margin-right:1em;">         <a href="#" class="dropdown-toggle" onclick="markread2();" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:15px; height:15px; color: white;">             {% if notifications.count[0].count != 0 %}             <span id="redmark" style="position: absolute;     top: 0;     right: -5px;     width: 1.2em;     height: 1.4em;     font-size: 12px;     background: red;     border: 1px solid red;     border-radius: 50%;     text-align: center;">{{notifications.count[0].count}}</span>             {% endif %}             <span class="fas fa-bell" style="color: rgba(0,0,0,.9); margin-right: 25px; color: #999 !important;"> </span>             <span class="badge pull-right"></span>         </a>       <ul class="dropdown-menu" style="position: absolute; font-size: 12px; left:auto; right:0; font-style: normal; color: #999 !important; width: 250px; font-size:12px;">           <div class="notify-drop-title">             <div class="row" style="margin:0px !important;">                 <div style="text-align: center; width:100% !important;">Notifications</div>             </div>         </div>           <hr>           <div class="drop-content">               {% for notification in notifications.notifications %}               {% if notification.unread == 'True' %}               <div style="border-bottom:1px solid lightgrey; height:60px; margin-bottom:1em; background-color:#e8e8e8 !important;" >               {% else %}               <div style="border-bottom:1px solid lightgrey; height:60px; margin-bottom:1em;">               {% endif %}                   <div style="width: 20%; display: inline-block; float: left; margin-left: 2%;">                   <img src="{{ notification.profile }}" alt="" style="width:45px; height:45px; margin-top: 10%;">                   </div>                   {% if notification.status == 'returned' %}                   <a href="/writer/{{notification.type}}/{{notification.name}}" style="color: #212529;">                       <div style="width: 75%; display: inline-block; margin-left: 3%;">                                 Your submission has been accepted and published.                                 <p class="time" style="font-size:10px;">{{ notification.date }}</p>                       </div>                   </a>                   {% elif notification.status == 'checked' %}                   <a href="/writer/returned-submissions/1" style="color: #212529;">                       <div style="width: 75%; display: inline-block; margin-left: 3%;">                                 Your submission has been returned.                                 <p class="time" style="font-size:10px;">{{ notification.date }}</p>                       </div>                   </a>                   {% endif %}               </div>               {% else %}                 <div style="border-bottom:1px solid lightgrey; height:60px; margin-bottom:1em;">                       <div style="width: 100%; display: inline-block; margin-left: 3%; text-align: center;">                                 You have no notifications.                       </div>                 </div>               {% endfor %}           </div>           <div class="notify-drop-footer text-center">           </div>       </ul>   </li> {% endblock %}
 {% block content %}
 <div class="signin-modal modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
     aria-hidden="true">
@@ -173,11 +174,24 @@
                 <input type="text" name="Title" placeholder="Title" id="title_des" value="{{ submission.name }}" style="width:100.2%;" required>
                 <textarea class="tinymce" id="texteditor">{{ submission.content | safe }}</textarea>
                 <h3>Photo:</h3>
-                <img class="image image-small" style="width:100%; height:20em; margin-bottom:1em; margin-top:1em;" src="data:image;base64, {{ submission.photo }}" />
-                <div id="uploader"></div>
-                {% if submission.comment %}
-                <h5>Comment: {{ submission.comment }}</h5>
+                <img class="image image-small" style="width:80%; margin-bottom:1em; margin-top:1em;" id="img-preview" src="{{ submission.photo }}" />
+                <input type="submit" value="{{ submission.photo }}" id="secure_url" style="display:none;" readonly>
+                <input type="submit" value="{{ submission.public_id }}" id="public_id" style="display:none;"  readonly>
                 <input style="display:none;" value="{{ submission.write_id }}" id="writeid" type="number" readonly>
+                <br>
+                <div class="btn btn-primary" style="
+        overflow: hidden;
+        direction: ltr;
+        background: #333;
+        border: #333; margin-top:1em;">
+                  <label class="file-upload-container" for="file-upload">
+                    <input id="file-upload" type="file" style="display:none;">
+                    Select an Image
+                  </label>
+                </div>
+                <br>
+                {% if submission.status == 'Checked' %}
+                <h5>Comment: {{ submission.comment }}</h5>
                 <input type="submit" class="btn" id="submit_attraction" value="Submit" style="margin-top:3em;">
                 <input type="submit" class="btn" id="draft_attraction" value="Save to Draft" style="margin-top:3em;">
                 <input type="submit" class="btn" id="cancel" value="Cancel" style="margin-top:3em;">
@@ -199,34 +213,59 @@
 {% endblock %}
 {% block custom_js %}
 <!-- CUSTOM JS -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
-        // Some options to pass to the uploader are discussed on the next page
-        var uploader = new qq.FineUploader({
-            element: document.getElementById("uploader"),
-            debug: true,
-            request: {
-                endpoint: '/upload'
+    var CLOUDINARY_URL =  'https://api.cloudinary.com/v1_1/diit9i4hz/image/upload';
+var CLOUDINARY_UPLOAD_PRESET = 'irbltunb';
+
+var imgPreview = document.getElementById('img-preview');
+var fileUpload = document.getElementById('file-upload');
+var secureURL = document.getElementById('secure_url');
+var publicId = document.getElementById('public_id');
+
+fileUpload.addEventListener('change', function(event) {
+    var file = event.target.files[0];
+    var formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+
+    axios({
+        url: CLOUDINARY_URL,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: formData
+    }).then(function(res) {
+        $.ajax({
+            url: "http://127.0.0.1:5000/api/writer/upload",
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'public_id': res.data.public_id,
+                'secure_url': res.data.secure_url,
+                'url': res.data.url,
+            }),
+            method: "POST",
+            dataType: "json",
+            crossDomain: true,
+            success: function () {
+                console.log("success");
+                alert("Submitted!");
             },
-            deleteFile: {
-                enabled: true,
-                endpoint: '/delete'
-            },
-            retry: {
-               enableAuto: true
-            },
-            validation: {
-                itemLimit: 1,
-                allowedExtensions: ['jpeg', 'jpg', 'gif', 'png']
-            },
-            callbacks: {
-                onSubmit: function (id, fileName) {
-                    alert(fileName);
-                },
-                setName: function (id, name) {
-                    alert(name);
-                }
+            error: function () {
+                console.log('error')
             }
-            })
+        });
+        console.log(res);
+        imgPreview.src = res.data.secure_url;
+        secureURL.value = res.data.secure_url;
+        publicId.value = res.data.public_id;
+        localStorage.setItem('public_id', res.data.public_id);
+    }).catch(function(err) {
+        console.log(err);
+    });
+
+});
 </script>
 <script>
         $(document).ready(function () {
@@ -235,6 +274,7 @@
             var region = $(".region option:selected").val();
             var destination = $(".destination option:selected").val();
             var write_id = $("#writeid").val();
+            var public_id = $("#public_id").val();
             var location = $("#location_des").val();
             var name = $("#title_des").val();
             var username = localStorage.getItem('user');
@@ -249,6 +289,7 @@
                     'name' : name,
                     'location' : location,
                     'write_id' : write_id,
+                    'public_id' : public_id,
                 }),
                 method: "POST",
                 dataType: "json",
@@ -256,7 +297,7 @@
                 success: function () {
                     console.log("success");
                     alert("Submitted!");
-                    window.location.href='/writer/submissions'
+                    window.location.href='/writer/submissions/1'
                 },
                 error: function () {
                     console.log('error')
@@ -265,7 +306,7 @@
             return false;
         });
         $('#cancel_edit').click(function () {
-            window.location.href='/writer/submissions'
+            window.location.href='/writer/submissions/1'
             return false;
         });
     })
@@ -281,6 +322,8 @@
                 var username = localStorage.getItem('user')
                 var location = $("#location_des").val();
                 var write_id = $("#writeid").val();
+                var public_id = $("#public_id").val();
+                var write_id = $("#writeid").val();
                 $.ajax({
                     url: "http://127.0.0.1:5000/api/writer/submit/attraction2",
                     contentType: 'application/json; charset=utf-8',
@@ -292,6 +335,8 @@
                         'name' : name,
                         'location' : location,
                         'write_id' : write_id,
+                        'public_id' : public_id,
+                        'write_id' : write_id,
                     }),
                     method: "POST",
                     dataType: "json",
@@ -299,7 +344,7 @@
                     success: function () {
                         console.log("success");
                         alert("Submitted!");
-                        window.location.href='/writer'
+                        window.location.href='/writer/1'
                     },
                     error: function () {
                         console.log('error')
@@ -314,8 +359,10 @@
                 var username = localStorage.getItem('user')
                 var location = $("#location_des").val();
                 var destination = $(".destination option:selected").val();
+                var public_id = $("#public_id").val();
+                var write_id = $("#writeid").val();
                 $.ajax({
-                    url: "http://127.0.0.1:5000/api/writer/draft/attraction",
+                    url: "http://127.0.0.1:5000/api/writer/draft/attraction2",
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify({
                         'username': username,
@@ -324,6 +371,8 @@
                         'destination' : destination,
                         'name' : name,
                         'location' : location,
+                        'public_id' : public_id,
+                        'write_id' : write_id,
                     }),
                     method: "POST",
                     dataType: "json",
@@ -331,7 +380,7 @@
                     success: function () {
                         console.log("success");
                         alert("Submitted!");
-                        window.location.href='/writer'
+                        window.location.href='/writer/1'
                     },
                     error: function () {
                         console.log('error')
@@ -340,7 +389,7 @@
                 return false;
             });
             $('#cancel').click(function () {
-                window.location.href='/writer';
+                window.location.href='/writer/1';
                 return false;
             });
         });

@@ -51,7 +51,7 @@
                             localStorage.setItem('role_id', resp.role_id);
                             localStorage.setItem('public_id', resp.public_id);
                             localStorage.setItem('auth_id', 'Basic ' + btoa(username + ':' + password));
-                            window.location.href = '/writer';
+                            window.location.href = '/writer/1';
                         }
 
 
@@ -134,7 +134,7 @@
           <div class="post-preview">
             <a href="#">
                 <img style="width: 100%;
-    height: 640px;" src="data:image;base64, {{ post.photo }}" />
+    height: 640px;" src="{{ post.photo }}" />
               <h2 class="post-title">
                 {{ post.title }}
               </h2>
@@ -163,7 +163,7 @@
                 <fieldset>
                     <div class="row">
                         <div class="col-sm-8 col-md-12  col-md-offset-12">
-                            <form name="login" id="login" method="post" action="{{ url_for('login') }}">
+                            <form name="login" id="login" method="post" action="{{ url_for('index') }}">
                                 <div class="form-group">
                                     <input type="text" name="username" id="uusername" tabindex="1" class="form-control"
                                            placeholder="Username" value="">

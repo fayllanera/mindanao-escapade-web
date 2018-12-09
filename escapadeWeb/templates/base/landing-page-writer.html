@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Mindanao Escapade</title>
+    <link rel="icon" type="image/gif/png" href="{{url_for('static', filename='img/logo.ico')}}">
+    <title>Majestic Mindanao</title>
         <!-- Bootstrap core CSS -->
     <link href="{{url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
     <script src="{{url_for('static', filename='js/jquery-3.3.1.min.js')}}"></script>
@@ -40,38 +41,80 @@ background-attachment: fixed;">
 <!-- Navigation -->
     <nav class="navbar navbar-light bg-light static-top" style="background-color: black; height: 10%;" id="mainNav">
       <div class="container">
-        <a class="navbar-brand" href="/writer" style="margin-right:-20px; color: rgba(0,0,0,.9);">Mindanao Escapade</a>
+        <a class="navbar-brand" href="/writer/1" style="margin-right:-20px; color: rgba(0,0,0,.9); letter-spacing: 0.0714286em;
+    font-size: 27px;
+    text-transform: uppercase;
+    font-style: normal;">Majestic Mindanao</a>
           <ul class="navbar-nav ml-auto" style="flex-direction: row">
             <div class="navbar-header">
                 <div class="nav navbar-nav navbar-right">
                         <li class="dropdown" style="margin-right: 2em;">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: rgba(0,0,0,.9);">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: rgba(0,0,0,.9); font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 500;
+    font-style: normal; color: #999 !important;">
                               Categories
                           </a>
                           <ul class="dropdown-menu" aria-labelledby="about-us" style="position: absolute;">
-                              <li><a href="/writer/view/region" style="color: rgba(0,0,0,.9);">Regions</a></li>
-                              <li><a href="/writer/view/destination" style="color: rgba(0,0,0,.9);">Destinations</a></li>
-                              <li><a href="/writer/view/attractions" style="color: rgba(0,0,0,.9);">Attractions</a></li>
+                              <li><a href="/writer/view/regions/1" style="color: rgba(0,0,0,.9); font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 500;
+    font-style: normal; color: #999 !important;">Regions</a></li>
+                              <li><a href="/writer/view/destination/1" style="color: rgba(0,0,0,.9); font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 500;
+    font-style: normal; color: #999 !important;">Destinations</a></li>
+                              <li><a href="/writer/view/attractions/1" style="color: rgba(0,0,0,.9); font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 500;
+    font-style: normal; color: #999 !important;">Attractions</a></li>
                           </ul>
                       </li>
                       <li><a href="#" class="js-scroll-trigger" data-toggle="modal"
-                            data-target="#squarespaceModal" style="color: white;"><span style="color: rgba(0,0,0,.9); margin-right: 25px;">Write a Post</span>
+                            data-target="#squarespaceModal" style="color: white;"><span style="color: rgba(0,0,0,.9); margin-right: 25px; font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 500;
+    font-style: normal; color: #999 !important;">Write a Post</span>
                             <span class="badge pull-right"></span>
                       </a></li>
-                      <li><a href="#" style="color: white;"><span class="fas fa-home" style="color: rgba(0,0,0,.9); margin-right: 30px;"> </span>
+                      <li><a href="/writer/1" style="color: white;"><span class="fas fa-home" style="color: rgba(0,0,0,.9); margin-right: 30px; color: #999 !important;"> </span>
                           <span class="badge pull-right"></span>
                       </a></li>
-                      <li><a href="#" style="color: white;"><span class="fas fa-bell" style="color: rgba(0,0,0,.9); margin-right: 25px;"> </span>
-                            <span class="badge pull-right"></span>
-                      </a></li>
+                      {% block notification %}
+                        {% endblock %}
                       <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: rgba(0,0,0,.9);">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: rgba(0,0,0,.9); font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 500;
+    font-style: normal; color: #999 !important;">
                           </a>
                           <ul class="dropdown-menu" aria-labelledby="about-us" style="position: absolute;">
-                              <li><a href="/profile/info" style="color: rgba(0,0,0,.9);">Profile</a></li>
-                              <li><a href="/writer/drafts" style="color: rgba(0,0,0,.9);">My Drafts</a></li>
-                              <li><a href="/writer/submissions" style="color: rgba(0,0,0,.9);">My Submissions</a></li>
-                              <li><a href="/logout" style="color: rgba(0,0,0,.9);"></span>Log out</a></li>
+                              <li><a href="/profile/info" style="color: rgba(0,0,0,.9); font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 500;
+    font-style: normal; color: #999 !important;">Profile</a></li>
+                              <li><a href="/writer/drafts/1" style="color: rgba(0,0,0,.9); font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 500;
+    font-style: normal; color: #999 !important;">My Drafts</a></li>
+                              <li><a href="/writer/submissions/1" style="color: rgba(0,0,0,.9); font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 500;
+    font-style: normal; color: #999 !important;">My Submissions</a></li>
+                              <li><a href="/logout" style="color: rgba(0,0,0,.9); font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 500;
+    font-style: normal; color: #999 !important;"></span>Log out</a></li>
                           </ul>
                       </li>
                 </div>
@@ -131,6 +174,7 @@ background-attachment: fixed;">
     <!-- Bootstrap core JavaScript -->
     <script src="{{url_for('static', filename='vendor/jquery/jquery.min.js')}}"></script>
     <script src="{{url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/mark_read.js')}}"></script>
     {% block custom_js %}
     {% endblock %}
 </body>

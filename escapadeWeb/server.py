@@ -294,7 +294,7 @@ def write_attraction():
 @server.route('/writer/<pagenum>', methods=['GET','POST'])
 def writer(pagenum):
     if 'user' in session:
-        submissions = requests.get('http://127.0.0.1:5000/get_posted', json={'pagenum' : pagenum})
+        submissions = requests.get('http://127.0.0.1:5000/get_posted', json={"pagenum" : pagenum})
         dict = json.loads(submissions.text)
         return render_template('writer.html', posts=dict['submissions'], notifications=get_notifications_writer(), paginate=jsonpickle.decode(dict['posts'][0]['paginate']),
                                count=(int(math.ceil(float(dict['posts'][0]['count']) / 10))) + 1)

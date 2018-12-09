@@ -1,10 +1,10 @@
 {% extends 'base/landing-page-base.html' %}
 {% block custom_css %}
 <!-- Custom CSS -->
-    <script>
+ <script>
     $(document).ready(function () {
-        localStorage.clear();
-        $('#login').submit(function () {
+
+        $('#memes').click(function () {
             var username = $("#uusername").val();
             var password = $("#ppassword").val();
 
@@ -27,18 +27,43 @@
                     localStorage.setItem('role_id', resp.role_id);
                     localStorage.setItem('public_id', resp.public_id);
                     localStorage.setItem('auth_id', 'Basic ' + btoa(username + ':' + password));
+                    var roles = resp.role_id;
+
                     if (resp.role_id == '1') {
-                        console.log("admin success");
-                        window.location.href = '/admin';
+                        console.log("success");
+                        var roles = resp.role_id;
+                        var form = document.getElementById("loginform");
+                        var node = document.createElement("input");
+                        node.setAttribute('type', 'hidden');
+                        node.setAttribute('name', 'roleid');
+                        node.setAttribute('value', roles);
+                        form.appendChild(node);
+                        $("#loginform").submit();
                     }
                     else if (resp.role_id == '2') {
-                        console.log("editor success")
-                        window.location.href = '/editor';
+                        console.log("success");
+                        var roles = resp.role_id;
+                        var form = document.getElementById("loginform");
+                        var node = document.createElement("input");
+                        node.setAttribute('type', 'hidden');
+                        node.setAttribute('name', 'roleid');
+                        node.setAttribute('value', roles);
+                        form.appendChild(node);
+                        $("#loginform").submit();
                     }
                     else if (resp.role_id == '3') {
-                        console.log("writer success")
-                        window.location.href = '/writer';
+                        console.log("success");
+                        var roles = resp.role_id;
+                        var form = document.getElementById("loginform");
+                        var node = document.createElement("input");
+                        node.setAttribute('type', 'hidden');
+                        node.setAttribute('name', 'roleid');
+                        node.setAttribute('value', roles);
+                        form.appendChild(node);
+                        $("#loginform").submit();
                     }
+
+
 
 
                 },
@@ -82,7 +107,7 @@
                     <fieldset>
                         <div class="row">
                             <div class="col-sm-8 col-md-12  col-md-offset-12">
-                                <form name="login" id="login" method="post" action="{{ url_for('login') }}">
+                                <form name="login" id="loginform" method="post" action="{{ url_for('index') }}">
                                     <div class="form-group">
                                         <input type="text" name="username" id="uusername" tabindex="1" class="form-control"
                                                placeholder="Username" value="">
@@ -119,7 +144,12 @@
       <div class="container">
         <div class="row">
           <div class="col-xl-9 mx-auto">
-            <h1 class="mb-5">Discover The Land of Promise</h1>
+            <h1 class="mb-5" style="letter-spacing: 0.0322581em;
+    font-size: 62px;
+    line-height: 1.25em;
+    text-transform: none;
+    font-weight: 300;
+    font-style: normal;">Discover The Land of Promise</h1>
           </div>
           <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
             <form>
@@ -137,34 +167,49 @@
         <div class="row">
           <div class="col-lg-4">
             <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-            <a href="/region" style="color: initial; text-decoration: none !important;">
+            <a href="/regions/1" style="color: initial; text-decoration: none !important;">
               <div class="features-icons-icon d-flex">
-                <img class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" src="../static/img/mtapo.jpg" alt="">
+                <img class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" src="../static/img/bukidnon2.png" alt="">
               </div>
               <h3>Regions</h3>
-              <p class="lead mb-0">Learn about the region.</p>
+              <p class="lead mb-0" style="font-size: 15px;
+    line-height: 1.6em;
+    letter-spacing: .02em;
+    font-weight: 300;
+    font-style: normal;
+">Learn about the region.</p>
             </a>
             </div>
           </div>
           <div class="col-lg-4">
             <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-            <a href="/attractions" style="color: initial; text-decoration: none !important;">
+            <a href="/attractions/1" style="color: initial; text-decoration: none !important;">
               <div class="features-icons-icon d-flex">
-                <img class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" src="../static/img/kawasan%20falls.jpg" alt="">
+                <img class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" src="../static/img/siargao.jpg" alt="">
               </div>
               <h3>Attractions</h3>
-              <p class="lead mb-0">Travel to places.</p>
+              <p class="lead mb-0" style="font-size: 15px;
+    line-height: 1.6em;
+    letter-spacing: .02em;
+    font-weight: 300;
+    font-style: normal;
+">Travel to places.</p>
             </a>
             </div>
           </div>
           <div class="col-lg-4">
             <div class="features-icons-item mx-auto mb-0 mb-lg-3">
-                <a href="/destinations" style="color: initial; text-decoration: none !important;">
+                <a href="/destinations/1" style="color: initial; text-decoration: none !important;">
               <div class="features-icons-icon d-flex">
-                <img class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" src="../static/img/iligan%20fiesta.jpg" alt="">
+                <img class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" src="../static/img/mindanao3.jpg" alt="">
               </div>
               <h3>Destinations</h3>
-              <p class="lead mb-0">Explore the cities.</p>
+              <p class="lead mb-0" style="font-size: 15px;
+    line-height: 1.6em;
+    letter-spacing: .02em;
+    font-weight: 300;
+    font-style: normal;
+">Explore the cities.</p>
                 </a>
             </div>
           </div>
@@ -195,7 +240,7 @@
           <img class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" style="width:1280px;
     height: 640px;     border: 0;
     max-width: 100%;
-    height: auto;" src="data:image;base64, {{ post.photo }}" alt="">
+    height: auto;" src="{{ post.photo }}" alt="">
           <div class="product-item-description d-flex mr-auto">
             <div class="bg-faded p-5 rounded">
               <div class="mb-0" style="    overflow: hidden;
@@ -206,6 +251,30 @@
       </div>
     </section>
   {% endfor %}
+    <nav aria-label="Page navigation example" style="text-align:center; padding-left: 45%;">
+      <ul class="pagination">
+          <li class="page-item">
+              <a class="page-link" href="/{{count}}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+       {% for page in paginate %}
+            {% if page %}
+              <li class="page-item"><a class="page-link" href="/{{count}}">{{ page }}</a></li>
+              {% else %}
+              <li class="page-item"><a class="page-link">...</a></li>
+            {% endif %}
+
+          {% endfor %}
+          <li class="page-item">
+          <a class="page-link" href="/{{count-1}}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
 {% endblock %}
 {% block custom_js %}
 <!-- CUSTOM JS -->

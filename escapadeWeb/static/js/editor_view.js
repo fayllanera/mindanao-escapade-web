@@ -17,7 +17,7 @@ $(document).ready(function () {
             success: function () {
                 console.log("success");
                 alert("Submitted!");
-                window.location.href='/editor/submissions'
+                window.location.href='/editor/submissions/1'
             },
             error: function () {
                 console.log('error')
@@ -45,7 +45,7 @@ $(document).ready(function () {
             success: function () {
                 console.log("success");
                 alert("Submitted!");
-                window.location.href='/editor/submissions'
+                window.location.href='/editor/submissions/1'
             },
             error: function () {
                 console.log('error')
@@ -67,7 +67,7 @@ $(document).ready(function () {
             success: function () {
                 console.log("success");
                 alert("Submitted!");
-                window.location.href='/editor/submissions'
+                window.location.href='/editor/submissions/1'
             },
             error: function () {
                 console.log('error')

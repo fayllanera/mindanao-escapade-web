@@ -1,6 +1,7 @@
 {% extends 'base/landing-page-editor.html' %}
 {% block custom_css %}
 <!-- Custom CSS -->
+<link rel="stylesheet" href="{{url_for('static', filename='css/notification.css')}}">
 <script>
   $(document).ready(function () {
             var role_id = localStorage.getItem('role_id');
@@ -112,6 +113,80 @@
         }
     </style>
 {% endblock %}
+{% block notification %}
+    <li class="dropdown" style="width:15px; height:15px; margin-right:1em;">
+        <a href="#" class="dropdown-toggle" onclick="markread();" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:15px; height:15px; color: white;">
+            {% if notifications.count[0].count != 0 %}
+            <span id="redmark" style="position: absolute;
+    top: 0;
+    right: -5px;
+    width: 1.2em;
+    height: 1.4em;
+    font-size: 12px;
+    background: red;
+    border: 1px solid red;
+    border-radius: 50%;
+    text-align: center;">{{notifications.count[0].count}}</span>
+            {% endif %}
+            <span class="fas fa-bell" style="color: rgba(0,0,0,.9); margin-right: 25px; color: #999 !important;"> </span>
+            <span class="badge pull-right"></span>
+        </a>
+      <ul class="dropdown-menu" style="position: absolute; font-size: 12px; left:auto; right:0;
+font-style: normal; color: #999 !important; width: 250px; font-size:12px;">
+          <div class="notify-drop-title">
+            <div class="row" style="margin:0px !important;">
+                <div style="text-align: center; width:100% !important;">Notifications</div>
+            </div>
+        </div>
+          <hr>
+          <div class="drop-content">
+              {% if notifications.count[0].count >= 10%}
+                    <div style="border-bottom:1px solid lightgrey; height:60px; margin-bottom:1em; background-color:#e8e8e8 !important;" >
+                          <div style="width: 20%; display: inline-block; float: left; margin-left: 2%;">
+                          <img src="{{ notifications.notifications.profile }}" alt="" style="width:45px; height:45px; margin-top: 10%;">
+                          </div>
+                          <a href="" style="color: #212529;">
+                              <div style="width: 75%; display: inline-block; margin-left: 3%;">
+                                        {% if notifications.notifications.status == 'submission' %}
+                                        {{ notifications.notifications.fullname }} and {{ notifications.notifications.count[0]-1 }} have submitted a post.
+                                        {% endif %}
+                                        <p class="time" style="font-size:10px;">{{ notifications.notifications.date }}</p>
+                              </div>
+                          </a>
+                      </div>
+              {% else %}
+              {% for notification in notifications.notifications %}
+              {% if notification.unread == 'True' %}
+              <div style="border-bottom:1px solid lightgrey; height:60px; margin-bottom:1em; background-color:#e8e8e8 !important;" >
+              {% else %}
+              <div style="border-bottom:1px solid lightgrey; height:60px; margin-bottom:1em;">
+              {% endif %}
+                  <div style="width: 20%; display: inline-block; float: left; margin-left: 2%;">
+                  <img src="{{ notification.profile }}" alt="" style="width:45px; height:45px; margin-top: 10%;">
+                  </div>
+                  <a href="" style="color: #212529;">
+                      <div style="width: 75%; display: inline-block; margin-left: 3%;">
+                                {% if notification.status == 'submission' %}
+                                {{ notification.fullname }} has submitted a post.
+                                {% endif %}
+                                <p class="time" style="font-size:10px;">{{ notification.date }}</p>
+                      </div>
+                  </a>
+              </div>
+              {% else %}
+                <div style="border-bottom:1px solid lightgrey; height:60px; margin-bottom:1em;">
+                      <div style="width: 100%; display: inline-block; margin-left: 3%; text-align: center;">
+                                You have no notifications.
+                      </div>
+                </div>
+              {% endfor %}
+              {% endif %}
+          </div>
+          <div class="notify-drop-footer text-center">
+          </div>
+      </ul>
+  </li>
+{% endblock %}
 {% block content %}
 <div class="signin-modal modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
     aria-hidden="true">
@@ -168,7 +243,7 @@
                     <input name="write" type="number" style="display:none;" value="{{ submission.write_id }}" readonly>
                     <div class="col-lg-3 col-md-3 col-xs-12" style="max-width:100%">
                       <div class="headline-card tracked loaded" style="height: 420px;">
-                        <img class="image image-small" src="data:image;base64, {{ submission.photo }}" />
+                        <img class="image image-small" src="{{ submission.photo }}" />
                         <a class="gradient gradient-small" href="#" onclick="$(this).closest('form').submit()"></a>
                         <div class="body" style="bottom:100px;">
                           <h3>
@@ -178,7 +253,6 @@
                         </div>
 
                         <div class="text-preview" style="bottom:35px;">
-                          {{ submission.content | safe }}
                         </div>
                       </div>
                     </div>
@@ -191,7 +265,32 @@
         </div>
       </div>
 </section>
+{% if submissions|length != 0 %}
+<nav aria-label="Page navigation example" style="text-align:center; padding-left: 45%;">
+      <ul class="pagination">
+          <li class="page-item">
+              <a class="page-link" href="/editor/submissions/{{count}}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+       {% for page in paginate %}
+            {% if page %}
+              <li class="page-item"><a class="page-link" href="/editor/submissions/{{count}}">{{ page }}</a></li>
+              {% else %}
+              <li class="page-item"><a class="page-link">...</a></li>
+            {% endif %}
 
+          {% endfor %}
+          <li class="page-item">
+          <a class="page-link" href="/editor/submissions/{{count-1}}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+{% endif %}
 
 {% endblock %}
 {% block custom_js %}

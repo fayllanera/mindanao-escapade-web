@@ -1,6 +1,8 @@
 {% extends 'base/landing-page-normal.html' %}
 {% block custom_css %}
     <link href="../static/css/profile.css" rel="stylesheet">
+
+    
 {% endblock %}
 {% block content %}
     <!-- Profile -->
@@ -9,8 +11,16 @@
         <div class="col-md-3">
           <div class="profile-sidebar">
             <!-- SIDEBAR USERPIC -->
-              <div class="profile-userpic">
-                <img src="../static/img/2.jpg" class="img-responsive" style="margin-left: 60px;">
+              <!--<div class="">-->
+                <!--<img src="../static/img/2.jpg" class="img-responsive" style="margin-left: 60px;">-->
+              <!--</div>-->
+              <div class="profile-userpic" style="margin-left: 60px;" >
+                            
+                            <img src="{{infos.profile}}" style="vertical-align: middle; width: 150px;height: 150px;border-radius: 50%; " id="img-preview"/>
+                            <br><br>
+                            <label class="file-upload-container" for="file-upload">
+                            <input id="file-upload" type="file" name="profile_photo">
+                            </label>
               </div>
             <!-- END SIDEBAR USERPIC -->
             <!-- SIDEBAR USER TITLE -->
@@ -68,4 +78,76 @@
 {% endblock %}
 {% block custom_js %}
 <!-- CUSTOM JS -->
+<script src="{{url_for('static', filename='js/axios.min.js')}}"></script>
+<script>
+    
+
+
+    var CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dbmtbrihl/upload'; // cloudinary_url/upload naa sa tutorial 
+    var CLOUDINARY_UPLOAD_PRESET = 'uvyqfvkh' //settings then upload preset sa cloudinary acc
+    var id =''; //var to pass to database
+    var user = localStorage.getItem('user');
+
+    var imgPreview = document.getElementById("img-preview");
+    var fileUpload = document.getElementById("file-upload");
+
+    fileUpload.addEventListener('change', function(event) {
+      var file = event.target.files[0];
+      var formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+      axios({ // dl axios link
+        url: CLOUDINARY_URL,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded' //passing a form content header not a json
+        },
+        data: formData
+
+      }).then(function(res) {
+          console.log(res);
+          imgPreview.src = res.data.secure_url; // change preset to uploaded
+          id = res.data.secure_url;
+
+          $.ajax({
+                    url: "http://127.0.0.1:5000/api/profile/edit",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        'username':user,
+                        'profile':id,
+                       
+                    }),
+                    method: "POST",
+                    dataType: "json",
+                    crossDomain: true,
+                    success: function () {
+                        console.log("success");
+                        alert("Success!");
+                  
+                    },
+                    error: function () {
+                        console.log('error')
+                    },
+                    complete: function (jqXHR) {
+                        if (jqXHR.status == '401') {
+                            console.log(jqXHR.status)
+                        }
+                    }
+                })
+
+      }).catch(function(err) {
+          console.log(err); 
+
+      });
+
+      
+
+    });
+
+   
+
+
+</script>
+
 {% endblock %}

@@ -44,7 +44,7 @@
           <img class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" style="width:1280px;
     height: 640px;     border: 0;
     max-width: 100%;
-    height: auto;" src="data:image;base64, {{ post.photo }}" alt="">
+    height: auto;" src="{{ post.photo }}" alt="">
           <div class="product-item-description d-flex mr-auto">
             <div class="bg-faded p-5 rounded">
               <div class="mb-0" style="    overflow: hidden;
@@ -55,6 +55,30 @@
       </div>
     </section>
   {% endfor %}
+<nav aria-label="Page navigation example" style="text-align:center; padding-left: 45%;">
+      <ul class="pagination">
+          <li class="page-item">
+              <a class="page-link" href="/admin/attractions/{{count}}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+       {% for page in paginate %}
+            {% if page %}
+              <li class="page-item"><a class="page-link" href="/admin/attractions/{{count}}">{{ page }}</a></li>
+              {% else %}
+              <li class="page-item"><a class="page-link">...</a></li>
+            {% endif %}
+
+          {% endfor %}
+          <li class="page-item">
+          <a class="page-link" href="/admin/attractions/{{count-1}}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
 {% endblock %}
 {% block custom_js %}
 <!-- CUSTOM JS -->

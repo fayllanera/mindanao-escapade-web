@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Mindanao Escapade</title>
+    <link rel="icon" type="image/gif/png" href="{{url_for('static', filename='img/logo.ico')}}">
+    <title>Majestic Mindanao</title>
         <!-- Bootstrap core CSS -->
     <link href="{{url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
     <script src="{{url_for('static', filename='js/jquery-3.3.1.min.js')}}"></script>
@@ -39,35 +40,63 @@
 <body style="background:white; background-repeat: no-repeat;
 background-attachment: fixed;">
 <!-- Navigation -->
+
     <nav class="navbar navbar-light bg-light static-top" style="background-color: black; height: 10%;" id="mainNav">
       <div class="container">
-        <a class="navbar-brand" href="/admin" style="margin-right:-20px; color: rgba(0,0,0,.9);">Mindanao Escapade</a>
+        <a class="navbar-brand" href="/admin/1" style="margin-right:-20px; color: rgba(0,0,0,.9);     letter-spacing: 0.0714286em;
+    font-size: 27px;
+    text-transform: uppercase;
+    font-style: normal;
+}">Majestic Mindanao</a>
           <ul class="navbar-nav ml-auto" style="flex-direction: row">
             <div class="navbar-header">
                 <div class="nav navbar-nav navbar-right">
                           <li class="dropdown" style="margin-right: 2em;">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: rgba(0,0,0,.9);">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: rgba(0,0,0,.9); font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 500;
+    font-style: normal; color: #999 !important;">
                               Categories
                           </a>
-                          <ul class="dropdown-menu" aria-labelledby="about-us" style="position: absolute;">
-                              <li><a href="/admin/region" style="color: rgba(0,0,0,.9);">Regions</a></li>
-                              <li><a href="/admin/destinations" style="color: rgba(0,0,0,.9);">Destinations</a></li>
-                              <li><a href="/admin/attractions" style="color: rgba(0,0,0,.9);">Attractions</a></li>
-                              <li><a href="#" style="color: rgba(0,0,0,.9);"></span>Events</a></li>
+                          <ul class="dropdown-menu" aria-labelledby="about-us" style="position: absolute; font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 500;
+    font-style: normal; color: #999 !important;">
+                              <li><a href="/admin/regions/1" style="color: rgba(0,0,0,.9); font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 500;
+    font-style: normal; color: #999 !important;">Regions</a></li>
+                              <li><a href="/admin/destinations/1" style="color: rgba(0,0,0,.9); font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 500;
+    font-style: normal; color: #999 !important;">Destinations</a></li>
+                              <li><a href="/admin/attractions/1" style="color: rgba(0,0,0,.9); font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 500;
+    font-style: normal; color: #999 !important;">Attractions</a></li>
                           </ul>
                       </li>
                       </li>
-                      <li><a href="/admin/user" style="color: white;"><span style="color: rgba(0,0,0,.9); margin-right: 25px;">Users</span>
+                      <li><a href="/admin/user" style="color: white;"><span style="color: rgba(0,0,0,.9); font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 500;
+    font-style: normal; color: #999 !important; margin-right: 25px;">Users</span>
                             <span class="badge pull-right"></span>
                       </a></li>
-                      <li><a href="/admin" style="color: white;"><span class="fas fa-home" style="color: rgba(0,0,0,.9); margin-right: 30px;"> </span>
+                      <li><a href="/admin" style="color: white;"><span class="fas fa-home" style="color:#999 !important; margin-right: 30px; "> </span>
                           <span class="badge pull-right"></span>
                       </a></li>
                       <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: rgba(0,0,0,.9);">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: #999 !important;">
                           </a>
                           <ul class="dropdown-menu" aria-labelledby="about-us" style="position: absolute;">
-                              <li><a href="/logout" style="color: rgba(0,0,0,.9);"></span>Log out</a></li>
+                              <li><a href="/logout" style="color: #999 !important;"></span>Log out</a></li>
                           </ul>
                       </li>
                 </div>

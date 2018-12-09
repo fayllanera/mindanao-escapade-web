@@ -1,10 +1,10 @@
 {% extends 'base/landing-page-base.html' %}
 {% block custom_css %}
 <!-- Custom CSS -->
-            <script>
+ <script>
     $(document).ready(function () {
-        localStorage.clear();
-        $('#login').submit(function () {
+
+        $('#memes').click(function () {
             var username = $("#uusername").val();
             var password = $("#ppassword").val();
 
@@ -27,18 +27,43 @@
                     localStorage.setItem('role_id', resp.role_id);
                     localStorage.setItem('public_id', resp.public_id);
                     localStorage.setItem('auth_id', 'Basic ' + btoa(username + ':' + password));
+                    var roles = resp.role_id;
+
                     if (resp.role_id == '1') {
-                        console.log("admin success");
-                        window.location.href = '/admin';
+                        console.log("success");
+                        var roles = resp.role_id;
+                        var form = document.getElementById("loginform");
+                        var node = document.createElement("input");
+                        node.setAttribute('type', 'hidden');
+                        node.setAttribute('name', 'roleid');
+                        node.setAttribute('value', roles);
+                        form.appendChild(node);
+                        $("#loginform").submit();
                     }
                     else if (resp.role_id == '2') {
-                        console.log("editor success")
-                        window.location.href = '/writer';
+                        console.log("success");
+                        var roles = resp.role_id;
+                        var form = document.getElementById("loginform");
+                        var node = document.createElement("input");
+                        node.setAttribute('type', 'hidden');
+                        node.setAttribute('name', 'roleid');
+                        node.setAttribute('value', roles);
+                        form.appendChild(node);
+                        $("#loginform").submit();
                     }
                     else if (resp.role_id == '3') {
-                        console.log("writer success")
-                        window.location.href = '/writer';
+                        console.log("success");
+                        var roles = resp.role_id;
+                        var form = document.getElementById("loginform");
+                        var node = document.createElement("input");
+                        node.setAttribute('type', 'hidden');
+                        node.setAttribute('name', 'roleid');
+                        node.setAttribute('value', roles);
+                        form.appendChild(node);
+                        $("#loginform").submit();
                     }
+
+
 
 
                 },
@@ -139,7 +164,7 @@
                     <fieldset>
                         <div class="row">
                             <div class="col-sm-8 col-md-12  col-md-offset-12">
-                                <form name="login" id="login" method="post" action="{{ url_for('login') }}">
+                                <form name="login" id="login" method="post" action="{{ url_for('index') }}">
                                     <div class="form-group">
                                         <input type="text" name="username" id="uusername" tabindex="1" class="form-control"
                                                placeholder="Username" value="">
@@ -174,7 +199,7 @@
           <div class="container">
             <div class="row">
               <div class="col-xl-9 mx-auto">
-                <div class="cta-inner text-center rounded">
+                <div class="cta text-center rounded" style="background-color:rgba(255, 255, 255, 0.85);">
                   <h2 class="section-heading mb-4">
                     <span class="section-heading-upper">Register</span>
                   </h2>

@@ -1,0 +1,244 @@
+{% extends 'base/landing-page-editor.html' %}
+{% block custom_css %}
+    <link href="../static/css/profile.css" rel="stylesheet">
+
+    
+{% endblock %}
+{% block notification %}
+    <li class="dropdown" style="width:15px; height:15px; margin-right:1em;">
+        <a href="#" class="dropdown-toggle" onclick="markread();" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:15px; height:15px; color: white;">
+            {% if notifications.count[0].count != 0 %}
+            <span id="redmark" style="position: absolute;
+    top: 0;
+    right: -5px;
+    width: 1.2em;
+    height: 1.4em;
+    font-size: 12px;
+    background: red;
+    border: 1px solid red;
+    border-radius: 50%;
+    text-align: center;">{{notifications.count[0].count}}</span>
+            {% endif %}
+            <span class="fas fa-bell" style="color: rgba(0,0,0,.9); margin-right: 25px; color: #999 !important;"> </span>
+            <span class="badge pull-right"></span>
+        </a>
+      <ul class="dropdown-menu" style="position: absolute; font-size: 12px; left:auto; right:0;
+font-style: normal; color: #999 !important; width: 250px; font-size:12px;">
+          <div class="notify-drop-title">
+            <div class="row" style="margin:0px !important;">
+                <div style="text-align: center; width:100% !important;">Notifications</div>
+            </div>
+        </div>
+          <hr>
+          <div class="drop-content">
+              {% if notifications.count[0].count >= 10 %}
+                    <div style="border-bottom:1px solid lightgrey; height:60px; margin-bottom:1em; background-color:#e8e8e8 !important;" >
+                          <div style="width: 20%; display: inline-block; float: left; margin-left: 2%;">
+                          <img src="{{ notifications.notifications.profile }}" alt="" style="width:45px; height:45px; margin-top: 10%;">
+                          </div>
+                          <a href="" style="color: #212529;">
+                              <div style="width: 75%; display: inline-block; margin-left: 3%;">
+                                        {% if notifications.notifications.status == 'submission' %}
+                                        {{ notifications.notifications.fullname }} and {{ notifications.notifications.count[0]-1 }} have submitted a post.
+                                        {% endif %}
+                                        <p class="time" style="font-size:10px;">{{ notifications.notifications.date }}</p>
+                              </div>
+                          </a>
+                      </div>
+              {% else %}
+              {% for notification in notifications.notifications %}
+              {% if notification.unread == 'True' %}
+              <div style="border-bottom:1px solid lightgrey; height:60px; margin-bottom:1em; background-color:#e8e8e8 !important;" >
+              {% else %}
+              <div style="border-bottom:1px solid lightgrey; height:60px; margin-bottom:1em;">
+              {% endif %}
+                  <div style="width: 20%; display: inline-block; float: left; margin-left: 2%;">
+                  <img src="{{ notification.profile }}" alt="" style="width:45px; height:45px; margin-top: 10%;">
+                  </div>
+                  <a href="" style="color: #212529;">
+                      <div style="width: 75%; display: inline-block; margin-left: 3%;">
+                                {% if notification.status == 'submission' %}
+                                {{ notification.fullname }} has submitted a post.
+                                {% endif %}
+                                <p class="time" style="font-size:10px;">{{ notification.date }}</p>
+                      </div>
+                  </a>
+              </div>
+              {% else %}
+                <div style="border-bottom:1px solid lightgrey; height:60px; margin-bottom:1em;">
+                      <div style="width: 100%; display: inline-block; margin-left: 3%; text-align: center;">
+                                You have no notifications.
+                      </div>
+                </div>
+              {% endfor %}
+              {% endif %}
+          </div>
+          <div class="notify-drop-footer text-center">
+          </div>
+      </ul>
+  </li>
+{% endblock %}
+
+{% block content %}
+    <!-- Profile -->
+    <div class="container">
+      <div class="row profile">
+        <div class="col-md-3">
+          <div class="profile-sidebar">
+            <!-- SIDEBAR USERPIC -->
+              <!--<div class="">-->
+                <!--<img src="../static/img/2.jpg" class="img-responsive" style="margin-left: 60px;">-->
+              <!--</div>-->
+              <div class="profile-userpic" style="margin-left: 60px;" >
+                            
+                            <img src="{{infos.profile}}" style="vertical-align: middle; width: 150px;height: 150px;border-radius: 50%; " id="img-preview"/>
+                            <br><br>
+                            <label class="file-upload-container" for="file-upload">
+                            <input id="file-upload" type="file" name="profile_photo">
+                            </label>
+              </div>
+            <!-- END SIDEBAR USERPIC -->
+            <!-- SIDEBAR USER TITLE -->
+          <div class="profile-usertitle">
+          <div class="profile-usertitle-name">
+
+          </div>
+          <div class="profile-usertitle-job">
+
+          </div>
+        </div>
+        <!-- END SIDEBAR USER TITLE -->
+        <!-- SIDEBAR BUTTONS -->
+        <!-- <div class="profile-userbuttons">
+          <button type="button" class="btn btn-success btn-sm">Follow</button>
+          <button type="button" class="btn btn-danger btn-sm">Message</button>
+        </div> -->
+        <!-- END SIDEBAR BUTTONS -->
+        <!-- SIDEBAR MENU -->
+        <div class="profile-usermenu">
+          <ul class="nav">
+              <li>
+                  <a href="info" class="btn btn-sm btn-block btn-success">
+                    <i class="ace-icon fa fa-user bigger-120"></i>
+                    <span class="bigger-110">Info</span>
+                  </a>
+                  <a href="mypost" class="btn btn-sm btn-block btn-success" >
+                    <i class="ace-icon fa fa-home bigger-120"></i>
+                    <span class="bigger-110">Post</span>
+                  </a>
+                  <a href="/profile/activity_logs" class="btn btn-sm btn-block btn-success">
+                    <i class="ace-icon fa fa-list-alt bigger-120"></i>
+                    <span class="bigger-110">Activity Logs</span>
+                  </a>
+              </li>
+          </ul>
+        </div>
+        <!-- END MENU -->
+      </div>
+    </div>
+      {% if infos %}
+    <div class="col-md-9">
+            <table class="table table-user-information">
+                    <tbody>
+                      <tr>
+                        <td>Name: </td>
+                        <td>{{ infos.firstname }}</td>
+                      </tr>
+                      <tr>
+                        <td>Middle Name:</td>
+                        <td>{{ infos.middlename }}</td>
+                      </tr>
+                      <tr>
+                        <td>Last Name:</td>
+                        <td>{{ infos.lastname }}</td>
+                      </tr>
+                      <tr>
+                        <td>Contact Number:</td>
+                        <td>{{ infos.contact }}</td>
+                      </tr>
+                      <tr>
+                        <td>Age:</td>
+                        <td>{{ infos.age }}</td>
+                      </tr>
+                    </tbody>
+            </table>
+    </div>
+      {% endif %}
+  </div>
+</div>
+{% endblock %}
+{% block custom_js %}
+<!-- CUSTOM JS -->
+<script src="{{url_for('static', filename='js/axios.min.js')}}"></script>
+<script>
+    
+
+
+    var CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dbmtbrihl/upload'; // cloudinary_url/upload naa sa tutorial 
+    var CLOUDINARY_UPLOAD_PRESET = 'uvyqfvkh' //settings then upload preset sa cloudinary acc
+    var id =''; //var to pass to database
+    var user = localStorage.getItem('user');
+
+    var imgPreview = document.getElementById("img-preview");
+    var fileUpload = document.getElementById("file-upload");
+
+    fileUpload.addEventListener('change', function(event) {
+      var file = event.target.files[0];
+      var formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+      axios({ // dl axios link
+        url: CLOUDINARY_URL,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded' //passing a form content header not a json
+        },
+        data: formData
+
+      }).then(function(res) {
+          console.log(res);
+          imgPreview.src = res.data.secure_url; // change preset to uploaded
+          id = res.data.secure_url;
+
+          $.ajax({
+                    url: "http://127.0.0.1:5000/api/profile/edit",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        'username':user,
+                        'profile':id,
+                       
+                    }),
+                    method: "POST",
+                    dataType: "json",
+                    crossDomain: true,
+                    success: function () {
+                        console.log("success");
+                        alert("Success!");
+                  
+                    },
+                    error: function () {
+                        console.log('error')
+                    },
+                    complete: function (jqXHR) {
+                        if (jqXHR.status == '401') {
+                            console.log(jqXHR.status)
+                        }
+                    }
+                })
+
+      }).catch(function(err) {
+          console.log(err); 
+
+      });
+
+      
+
+    });
+
+   
+
+
+</script>
+
+{% endblock %}

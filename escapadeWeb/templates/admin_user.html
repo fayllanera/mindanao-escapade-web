@@ -106,7 +106,12 @@
                     dataset1.push(resp.entries[i].username);
                     dataset1.push(resp.entries[i].age);
                     dataset1.push(resp.entries[i].contact);
-                    dataset1.push(resp.entries[i].role_id);
+                    if (resp.entries[i].role_id == '2') {
+                        dataset1.push("Editor");
+                    }
+                    if (resp.entries[i].role_id == '3') {
+                        dataset1.push("Writer");
+                    }
                     if (resp.entries[i].role_id === '2') {
                          dataset1.push("<button class='btn btn-success' style='padding: 2px 5px' id='promote' disabled><span  style='text-align: center'>Promote</span></button><button id='demote' class='btn btn-danger btn-xs' style='padding: 2px 6px; margin-top: 5px;'><span style: 'text-align: center'>Demote</span></button>");
                     }

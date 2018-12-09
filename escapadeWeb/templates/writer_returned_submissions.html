@@ -2,14 +2,6 @@
 {% block custom_css %}
 <!-- Custom CSS -->
 <script>
-  $(document).ready(function () {
-            var role_id = localStorage.getItem('role_id');
-            if (role_id != '3') {
-                window.location.href = '/unauthorized';
-            }
-        })
-</script>
-<script>
    $(document).ready(function () {
             $('#type').submit(function () {
                 var type = $(".type-select option:selected").val();
@@ -27,90 +19,71 @@
         })
 </script>
 <link href="{{url_for('static', filename='css/news.css')}}" rel="stylesheet">
-<link href="{{url_for('static', filename='plugin/fine-uploader/fine-uploader.min.css')}}" rel="stylesheet">
-<script src="{{url_for('static', filename='plugin/fine-uploader/fine-uploader.min.js')}}"></script>
-    <script type="text/template" id="qq-template">
-        <div class="qq-uploader-selector qq-uploader qq-gallery" qq-drop-area-text="Drop files here">
-            <div class="qq-total-progress-bar-container-selector qq-total-progress-bar-container">
-                <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-total-progress-bar-selector qq-progress-bar qq-total-progress-bar"></div>
+{% endblock %}
+{% block notification %}
+    <li class="dropdown" style="width:15px; height:15px; margin-right:1em;">
+        <a href="#" class="dropdown-toggle" onclick="markread2();" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:15px; height:15px; color: white;">
+            {% if notifications.count[0].count != 0 %}
+            <span id="redmark" style="position: absolute;
+    top: 0;
+    right: -5px;
+    width: 1.2em;
+    height: 1.4em;
+    font-size: 12px;
+    background: red;
+    border: 1px solid red;
+    border-radius: 50%;
+    text-align: center;">{{notifications.count[0].count}}</span>
+            {% endif %}
+            <span class="fas fa-bell" style="color: rgba(0,0,0,.9); margin-right: 25px; color: #999 !important;"> </span>
+            <span class="badge pull-right"></span>
+        </a>
+      <ul class="dropdown-menu" style="position: absolute; font-size: 12px; left:auto; right:0;
+font-style: normal; color: #999 !important; width: 250px; font-size:12px;">
+          <div class="notify-drop-title">
+            <div class="row" style="margin:0px !important;">
+                <div style="text-align: center; width:100% !important;">Notifications</div>
             </div>
-            <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
-                <span class="qq-upload-drop-area-text-selector"></span>
-            </div>
-            <div class="qq-upload-button-selector qq-upload-button" style="width:20% !important;">
-                <div>Upload a file</div>
-            </div>
-            <span class="qq-drop-processing-selector qq-drop-processing">
-                <span>Processing dropped files...</span>
-                <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
-            </span>
-            <ul class="qq-upload-list-selector qq-upload-list" role="region" aria-live="polite" aria-relevant="additions removals">
-                <li>
-                    <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
-                    <div class="qq-progress-bar-container-selector qq-progress-bar-container">
-                        <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-progress-bar-selector qq-progress-bar"></div>
-                    </div>
-                    <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
-                    <div class="qq-thumbnail-wrapper">
-                        <img class="qq-thumbnail-selector" qq-max-size="120" qq-server-scale>
-                    </div>
-                    <button type="button" class="qq-upload-cancel-selector qq-upload-cancel">X</button>
-                    <button type="button" class="qq-upload-retry-selector qq-upload-retry">
-                        <span class="qq-btn qq-retry-icon" aria-label="Retry"></span>
-                        Retry
-                    </button>
-
-                    <div class="qq-file-info">
-                        <div class="qq-file-name">
-                            <span class="qq-upload-file-selector qq-upload-file"></span>
-                            <span class="qq-edit-filename-icon-selector qq-btn qq-edit-filename-icon" aria-label="Edit filename"></span>
-                        </div>
-                        <input class="qq-edit-filename-selector qq-edit-filename" tabindex="0" type="text">
-                        <span class="qq-upload-size-selector qq-upload-size"></span>
-                        <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">
-                            <span class="qq-btn qq-delete-icon" aria-label="Delete"></span>
-                        </button>
-                        <button type="button" class="qq-btn qq-upload-pause-selector qq-upload-pause">
-                            <span class="qq-btn qq-pause-icon" aria-label="Pause"></span>
-                        </button>
-                        <button type="button" class="qq-btn qq-upload-continue-selector qq-upload-continue">
-                            <span class="qq-btn qq-continue-icon" aria-label="Continue"></span>
-                        </button>
-                    </div>
-                </li>
-            </ul>
-
-            <dialog class="qq-alert-dialog-selector">
-                <div class="qq-dialog-message-selector"></div>
-                <div class="qq-dialog-buttons">
-                    <button type="button" class="qq-cancel-button-selector">Close</button>
-                </div>
-            </dialog>
-
-            <dialog class="qq-confirm-dialog-selector">
-                <div class="qq-dialog-message-selector"></div>
-                <div class="qq-dialog-buttons">
-                    <button type="button" class="qq-cancel-button-selector">No</button>
-                    <button type="button" class="qq-ok-button-selector">Yes</button>
-                </div>
-            </dialog>
-
-            <dialog class="qq-prompt-dialog-selector">
-                <div class="qq-dialog-message-selector"></div>
-                <input type="text">
-                <div class="qq-dialog-buttons">
-                    <button type="button" class="qq-cancel-button-selector">Cancel</button>
-                    <button type="button" class="qq-ok-button-selector">Ok</button>
-                </div>
-            </dialog>
         </div>
-    </script>
-      <style>
-        .qq-gallery .qq-upload-button {
-            background: #333;
-            border: #333;
-        }
-    </style>
+          <hr>
+          <div class="drop-content">
+              {% for notification in notifications.notifications %}
+              {% if notification.unread == 'True' %}
+              <div style="border-bottom:1px solid lightgrey; height:60px; margin-bottom:1em; background-color:#e8e8e8 !important;" >
+              {% else %}
+              <div style="border-bottom:1px solid lightgrey; height:60px; margin-bottom:1em;">
+              {% endif %}
+                  <div style="width: 20%; display: inline-block; float: left; margin-left: 2%;">
+                  <img src="{{ notification.profile }}" alt="" style="width:45px; height:45px; margin-top: 10%;">
+                  </div>
+                  {% if notification.status == 'returned' %}
+                  <a href="/writer/{{notification.type}}/{{notification.name}}" style="color: #212529;">
+                      <div style="width: 75%; display: inline-block; margin-left: 3%;">
+                                Your submission has been accepted and published.
+                                <p class="time" style="font-size:10px;">{{ notification.date }}</p>
+                      </div>
+                  </a>
+                  {% elif notification.status == 'checked' %}
+                  <a href="/writer/{{notification.type}}/{{notification.name}}" style="color: #212529;">
+                      <div style="width: 75%; display: inline-block; margin-left: 3%;">
+                                Your submission has been returned.
+                                <p class="time" style="font-size:10px;">{{ notification.date }}</p>
+                      </div>
+                  </a>
+                  {% endif %}
+              </div>
+              {% else %}
+                <div style="border-bottom:1px solid lightgrey; height:60px; margin-bottom:1em;">
+                      <div style="width: 100%; display: inline-block; margin-left: 3%; text-align: center;">
+                                You have no notifications.
+                      </div>
+                </div>
+              {% endfor %}
+          </div>
+          <div class="notify-drop-footer text-center">
+          </div>
+      </ul>
+  </li>
 {% endblock %}
 {% block content %}
 <div class="signin-modal modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
@@ -155,7 +128,7 @@
           <div class="col-xl-8 mx-auto">
             <div class="custom-inner text-center rounded">
               <h2 class="section-heading mb-4">
-                  <a href="/writer/submissions"><span class="section-heading-upper pull-left">Back to Submissions</span></a>
+                  <a href="/writer/submissions/1"><span class="section-heading-upper pull-left">Back to Submissions</span></a>
                 <span class="section-heading-upper">Returned Submissions</span>
               </h2>
                 {% for submission in submissions %}
@@ -168,7 +141,7 @@
                     {% endif %}
                         <input name="write" type="number" style="display:none;" value="{{ submission.write_id }}" readonly>
                           <div class="headline-card tracked loaded" style="height: 420px;">
-                            <img class="image image-small" src="data:image;base64, {{ submission.photo }}" />
+                            <img class="image image-small" src="{{ submission.photo }}" />
                             <a class="gradient gradient-small" href="#" onclick="$(this).closest('form').submit()"></a>
                             <div class="body" style="bottom:125px;">
                               <h3>
@@ -191,40 +164,36 @@
         </div>
       </div>
 </section>
+{% if submissions|length != 0 %}
+<nav aria-label="Page navigation example" style="text-align:center; padding-left: 45%;">
+      <ul class="pagination">
+          <li class="page-item">
+              <a class="page-link" href="/writer/returned-submissions/{{count}}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+       {% for page in paginate %}
+            {% if page %}
+              <li class="page-item"><a class="page-link" href="/writer/returned-submissions/{{count}}">{{ page }}</a></li>
+              {% else %}
+              <li class="page-item"><a class="page-link">...</a></li>
+            {% endif %}
 
+          {% endfor %}
+          <li class="page-item">
+          <a class="page-link" href="/writer/returned-submissions/{{count-1}}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+{% endif %}
 
 {% endblock %}
 {% block custom_js %}
 <!-- CUSTOM JS -->
-<script>
-        // Some options to pass to the uploader are discussed on the next page
-        var uploader = new qq.FineUploader({
-            element: document.getElementById("uploader"),
-            debug: true,
-            request: {
-                endpoint: '/upload'
-            },
-            deleteFile: {
-                enabled: true,
-                endpoint: '/delete'
-            },
-            retry: {
-               enableAuto: true
-            },
-            validation: {
-                itemLimit: 1,
-                allowedExtensions: ['jpeg', 'jpg', 'gif', 'png']
-            },
-            callbacks: {
-                onSubmit: function (id, fileName) {
-                    alert(fileName);
-                },
-                setName: function (id, name) {
-                    alert(name);
-                }
-            }
-            })
-</script>
 <script src="{{url_for('static', filename='plugin/tinymce/js/tinymce/tinymce.min.js')}}"></script>
 <script src="{{url_for('static', filename='plugin/tinymce/js/tinymce/init-tinymce.js')}}"></script>
 <script src="{{url_for('static', filename='js/getdata.js')}}"></script>

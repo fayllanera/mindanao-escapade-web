@@ -72,7 +72,7 @@
           <div class="col-xl-9 mx-auto">
             <div class="custom-inner text-center rounded">
               <h2 class="section-heading mb-4">
-                <span class="section-heading-upper">Drafts</span>
+                <span  style="margin-left: -140px;" class="section-heading-upper">Drafts</span>
               </h2>
                 {% for submission in submissions %}
                 {% if submission.type == 'Region' %}
@@ -93,8 +93,8 @@
                           </h3>
                             <h3>by {{ submission.author_name }}</h3>
                         </div>
-
-                        <div class="text-preview" style="bottom:35px;">
+                              
+                        <div class="text-preview" style="bottom:35px;"> 
                         </div>
                       </div>
                 </form>
@@ -106,25 +106,25 @@
         </div>
       </div>
 </section>
-{% if submissions|length != 0 %}
+{% if count > 1 %}
 <nav aria-label="Page navigation example" style="text-align:center; padding-left: 45%;">
       <ul class="pagination">
           <li class="page-item">
-              <a class="page-link" href="/writer/drafts/{{count}}" aria-label="Previous">
+              <a class="page-link" href="/writer/drafts/{{count-1}}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
                 <span class="sr-only">Previous</span>
               </a>
             </li>
        {% for page in paginate %}
             {% if page %}
-              <li class="page-item"><a class="page-link" href="/writer/drafts/{{count}}">{{ page }}</a></li>
+              <li class="page-item"><a class="page-link" href="/writer/drafts/{{page}}">{{ page }}</a></li>
               {% else %}
               <li class="page-item"><a class="page-link">...</a></li>
             {% endif %}
 
           {% endfor %}
           <li class="page-item">
-          <a class="page-link" href="/writer/drafts/{{count-1}}" aria-label="Next">
+          <a class="page-link" href="/writer/drafts/{{count}}" aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
             <span class="sr-only">Next</span>
           </a>

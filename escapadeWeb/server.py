@@ -12,7 +12,7 @@ server = Flask(__name__)
 def index():
     submissions = requests.get('http://127.0.0.1:5000/get_posted', json={'pagenum': 1})
     dict = json.loads(submissions.text)
-
+    print dict['posts'][0]['count']
     if request.method == 'POST':
         session.pop('user', None)
         session.pop('roleid', None)
@@ -32,7 +32,7 @@ def index():
 
 
     return render_template("landing_page.html", posts=dict['submissions'], paginate=jsonpickle.decode(dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(dict['posts'][0]['count'])/ 10))))
 
 @server.route('/<pagenum>', methods=['GET','POST'])
 def index2(pagenum):
@@ -55,10 +55,10 @@ def index2(pagenum):
 
         elif session['roleid'] == '3':
             return redirect(url_for('writer', pagenum=1))
-
+    print dict['posts'][0]['count']
 
     return render_template("landing_page.html", posts=dict['submissions'], paginate=jsonpickle.decode(dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(dict['posts'][0]['count']) / 10))))
 
 @server.before_request
 def before_request():
@@ -80,7 +80,13 @@ def view_region(name):
     post = requests.get('http://127.0.0.1:5000/get/region',
                                json={"title": name})
     post_dict = json.loads(post.text)
-    return render_template('view_post.html', post=post_dict['post'][0])
+    post2 = requests.get('http://127.0.0.1:5000/get/attraction/byregion',
+                               json={"title": name})
+    post2_dict = json.loads(post2.text)
+    post3 = requests.get('http://127.0.0.1:5000/get/destination/byregion',
+                               json={"title": name})
+    post3_dict = json.loads(post3.text)
+    return render_template('view_one_region.html', post=post_dict['post'][0], posts2=post2_dict['post2'], posts3=post3_dict['post3'])
 
 @server.route('/destination/<name>', methods=['GET'])
 def view_destination(name):
@@ -101,8 +107,13 @@ def admin_view_region(name):
     post = requests.get('http://127.0.0.1:5000/get/region',
                                json={"title": name})
     post_dict = json.loads(post.text)
-    print post_dict
-    return render_template('admin_view_post.html', post=post_dict['post'][0])
+    post2 = requests.get('http://127.0.0.1:5000/get/attraction/byregion',
+                               json={"title": name})
+    post2_dict = json.loads(post2.text)
+    post3 = requests.get('http://127.0.0.1:5000/get/destination/byregion',
+                               json={"title": name})
+    post3_dict = json.loads(post3.text)
+    return render_template('admin_view_one_region.html', post=post_dict['post'][0], posts2=post2_dict['post2'], posts3=post3_dict['post3'])
 
 @server.route('/admin/destination/<name>', methods=['GET'])
 def admin_view_destination(name):
@@ -144,7 +155,15 @@ def writer_view_region(name):
     post = requests.get('http://127.0.0.1:5000/get/region',
                                json={"title": name})
     post_dict = json.loads(post.text)
-    return render_template('writer_view_post.html', notifications=get_notifications_writer(), post=post_dict['post'][0])
+    post2 = requests.get('http://127.0.0.1:5000/get/attraction/byregion',
+                               json={"title": name})
+    post2_dict = json.loads(post2.text)
+    post3 = requests.get('http://127.0.0.1:5000/get/destination/byregion',
+                               json={"title": name})
+    post3_dict = json.loads(post3.text)
+    print post2_dict
+    print post3_dict
+    return render_template('writer_view_one_region.html', notifications=get_notifications_writer(), post=post_dict['post'][0],posts2=post2_dict['post2'], posts3=post3_dict['post3'])
 
 @server.route('/writer/destination/<name>', methods=['GET'])
 def writer_view_destination(name):
@@ -166,7 +185,7 @@ def view_all_destinations(pagenum):
     post_dict = json.loads(post.text)
     print(post_dict)
     return render_template('view_destinations.html', posts=post_dict['submissions'], paginate=jsonpickle.decode(post_dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))))
 
 @server.route('/attractions/<pagenum>', methods=['GET'])
 def view_all_attractions(pagenum):
@@ -174,7 +193,7 @@ def view_all_attractions(pagenum):
     post_dict = json.loads(post.text)
     print(post_dict)
     return render_template('view_attractions.html', posts=post_dict['submissions'], paginate=jsonpickle.decode(post_dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))))
 
 @server.route('/regions/<pagenum>', methods=['GET'])
 def view_all_region(pagenum):
@@ -182,70 +201,70 @@ def view_all_region(pagenum):
     post_dict = json.loads(post.text)
     print(post_dict)
     return render_template('view_regions.html', posts=post_dict['submissions'], paginate=jsonpickle.decode(post_dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))))
 
 @server.route('/admin/regions/<pagenum>', methods=['GET'])
 def view_admin_all_region(pagenum):
     post = requests.get('http://127.0.0.1:5000/get/all/region', json={"pagenum" : pagenum})
     post_dict = json.loads(post.text)
     return render_template('admin_region.html', posts=post_dict['submissions'], paginate=jsonpickle.decode(post_dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))))
 
 @server.route('/admin/destinations/<pagenum>', methods=['GET'])
 def view_admin_all_destination(pagenum):
     post = requests.get('http://127.0.0.1:5000/get/all/destinations', json={"pagenum" : pagenum})
     post_dict = json.loads(post.text)
     return render_template('admin_destinations.html', posts=post_dict['submissions'], paginate=jsonpickle.decode(post_dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))))
 
 @server.route('/admin/attractions/<pagenum>', methods=['GET'])
 def view_admin_all_attractions(pagenum):
     post = requests.get('http://127.0.0.1:5000/get/all/attractions', json={"pagenum" : pagenum})
     post_dict = json.loads(post.text)
     return render_template('admin_attractions.html', posts=post_dict['submissions'], paginate=jsonpickle.decode(post_dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))))
 
 @server.route('/editor/regions/<pagenum>', methods=['GET'])
 def view_editor_all_region(pagenum):
     post = requests.get('http://127.0.0.1:5000/get/all/region', json={"pagenum" : pagenum})
     post_dict = json.loads(post.text)
     return render_template('editor_region.html', posts=post_dict['submissions'], notifications=get_notifications_editor(), paginate=jsonpickle.decode(post_dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))))
 
 @server.route('/editor/destinations/<pagenum>', methods=['GET'])
 def view_editor_all_destination(pagenum):
     post = requests.get('http://127.0.0.1:5000/get/all/destinations', json={"pagenum" : pagenum})
     post_dict = json.loads(post.text)
     return render_template('editor_destinations.html', posts=post_dict['submissions'], notifications=get_notifications_editor(), paginate=jsonpickle.decode(post_dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))))
 
 @server.route('/editor/attractions/<pagenum>', methods=['GET'])
 def view_editor_all_attractions(pagenum):
     post = requests.get('http://127.0.0.1:5000/get/all/attractions', json={"pagenum" : pagenum})
     post_dict = json.loads(post.text)
     return render_template('editor_attractions.html', posts=post_dict['submissions'], notifications=get_notifications_editor(), paginate=jsonpickle.decode(post_dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))))
 
 @server.route('/writer/view/regions/<pagenum>', methods=['GET'])
 def view_writer_all_region(pagenum):
     post = requests.get('http://127.0.0.1:5000/get/all/region', json={"pagenum" : pagenum})
     post_dict = json.loads(post.text)
     return render_template('writer_view_region.html', notifications=get_notifications_writer(), posts=post_dict['submissions'], paginate=jsonpickle.decode(post_dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))))
 
 @server.route('/writer/view/destination/<pagenum>', methods=['GET'])
 def view_writer_all_destination(pagenum):
     post = requests.get('http://127.0.0.1:5000/get/all/destinations', json={"pagenum" : pagenum})
     post_dict = json.loads(post.text)
     return render_template('writer_view_destination.html', notifications=get_notifications_writer(), posts=post_dict['submissions'], paginate=jsonpickle.decode(post_dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))))
 
 @server.route('/writer/view/attractions/<pagenum>', methods=['GET'])
 def view_writer_all_attractions(pagenum):
     post = requests.get('http://127.0.0.1:5000/get/all/attractions', json={"pagenum" : pagenum})
     post_dict = json.loads(post.text)
     return render_template('writer_view_attractions.html', notifications=get_notifications_writer(), posts=post_dict['submissions'], paginate=jsonpickle.decode(post_dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))))
 
 
 @server.route('/unauthorized')
@@ -262,7 +281,7 @@ def landing_admin(pagenum):
         post = requests.get('http://127.0.0.1:5000/get_posted', json={"pagenum" : pagenum})
         post_dict = json.loads(post.text)
         return render_template('admin.html', posts=post_dict['submissions'], paginate=jsonpickle.decode(post_dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(post_dict['posts'][0]['count']) / 10))))
 
     else:
         flash('You are not logged in! Please log in!')
@@ -297,7 +316,7 @@ def writer(pagenum):
         submissions = requests.get('http://127.0.0.1:5000/get_posted', json={"pagenum" : pagenum})
         dict = json.loads(submissions.text)
         return render_template('writer.html', posts=dict['submissions'], notifications=get_notifications_writer(), paginate=jsonpickle.decode(dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(dict['posts'][0]['count']) / 10))))
     else:
         print('error')
         return redirect('unauthorized')
@@ -308,7 +327,7 @@ def editor(pagenum):
         submissions = requests.get('http://127.0.0.1:5000/get_posted', json={"pagenum": pagenum})
         dict = json.loads(submissions.text)
         return render_template('editor.html', posts=dict['submissions'], notifications=get_notifications_editor(), paginate=jsonpickle.decode(dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(dict['posts'][0]['count']) / 10))))
     else:
         print('error')
         return redirect('unauthorized')
@@ -319,7 +338,7 @@ def submissions(pagenum):
                              json={"username": session['user'], "pagenum": pagenum})
     dict = json.loads(submissions.text)
     return render_template('write_submission.html', submissions=dict['submissions'], notifications=get_notifications_writer(), paginate=jsonpickle.decode(dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(dict['posts'][0]['count']) / 10))))
 
 @server.route('/writer/returned-submissions/<pagenum>')
 def returned_submissions(pagenum):
@@ -327,7 +346,7 @@ def returned_submissions(pagenum):
                              json={"username": session['user'], "pagenum": pagenum})
     dict = json.loads(submissions.text)
     return render_template('writer_returned_submissions.html', submissions=dict['submissions'], notifications=get_notifications_writer(), paginate=jsonpickle.decode(dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(dict['posts'][0]['count']) / 10))))
 
 @server.route('/writer/drafts/<pagenum>')
 def drafts(pagenum):
@@ -336,7 +355,7 @@ def drafts(pagenum):
     dict = json.loads(submissions.text)
     print(dict)
     return render_template('write_drafts.html', submissions=dict['submissions'], notifications=get_notifications_writer(), paginate=jsonpickle.decode(dict['posts'][0]['paginate']),
-                               count=(int(math.ceil(float(dict['posts'][0]['count']) / 10))) + 1)
+                               count=(int(math.ceil(float(dict['posts'][0]['count']) / 10))))
 
 @server.route('/draft/edit', methods=['POST'])
 def edit_drafts():
@@ -517,7 +536,7 @@ def delete_writer():
         infos = requests.post('http://127.0.0.1:5000/api/editor/delete/destination', json={"write_id": write_id})
     else:
         infos = requests.post('http://127.0.0.1:5000/api/editor/delete/attraction', json={"write_id": write_id})
-    return redirect(url_for('writer', notifications=get_notifications_writer(), pagenum=1))
+    return redirect(url_for('editor', notifications=get_notifications_writer(), pagenum=1))
 
 def get_notifications_editor():
     notifications = requests.get('http://127.0.0.1:5000/api/notifications/editor', json={"username": session['user']})

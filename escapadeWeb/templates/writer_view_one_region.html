@@ -1,0 +1,146 @@
+{% extends 'base/landing-page-writer.html' %}
+{% block custom_css %}
+<!-- Custom CSS -->
+
+
+{% endblock %}
+{% block content %}
+    <div class="signin-modal modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="section-heading">Select what to write</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">Close</span></button>
+                </div>
+
+                <div class="modal-body">
+                    <fieldset>
+                        <div class="row">
+                            <div class="col-sm-8 col-md-12  col-md-offset-12">
+                                <form id="type">
+                                    <div class="form-group">
+                                        <select tabindex="1" class="type-select form-control">
+                                          <option value="" selected disabled hidden>Choose here</option>
+                                          <option value="Region">Region</option>
+                                          <option value="Destination">Destination</option>
+                                          <option value="Attraction">Attraction</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary btn-block">Next
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+    <header class="masthead text-white text-center" style="background: url({{post.photo}}) no-repeat center center;     background-size: cover;">
+      <div class="overlay" style="background-color:transparent;"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-9 mx-auto">
+            <h1 class="mb-5" style="letter-spacing: 0.0322581em;
+    font-size: 62px;
+    line-height: 1.25em;
+    text-transform: none;
+    font-weight: 300;
+    font-style: normal;">Discover {{post.name}}</h1>
+          </div>
+          <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+            <form>
+              <div class="form-row">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </header>
+    {% if post %}
+    <section class="page-section about-heading">
+          <div class="container">
+            <div class="about-heading-content">
+              <div class="row">
+                <div class="col-xl-9 col-lg-10 mx-auto">
+                  <div class="bg-faded rounded p-5">
+                    <h2 class="section-heading mb-4">
+                    {% if post.type == 'Region' %}
+                      <span class="section-heading-upper">Region</span>
+                    {% elif post.type == 'Destination' %}
+                                          <a href="/writer/destination/{{post.name}}"><span class="section-heading-upper">Discover {{ post.location }}</span></a>
+                    {% elif post.type == 'Attraction' %}
+                        <a href="/writer/region/{{post.region_name}}"><span class="section-heading-upper">Discover {{ post.region_name }}</span></a>
+                    {% endif %}
+                    </h2>
+                    {{ post.content | safe}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+    {% endif %}
+    {% for post2 in posts3 %}
+    <section class="page-section about-heading">
+          <div class="container">
+            <img class="img-fluid rounded about-heading-img mb-3 mb-lg-0" style="width: 1280px;
+    height: 640px;     border: 0;
+    max-width: 100%;
+    height: auto;" src="{{ post2.photo }}" alt="">
+            <div class="about-heading-content">
+              <div class="row">
+                <div class="col-xl-9 col-lg-10 mx-auto">
+                  <div class="bg-faded rounded p-5">
+                    <h2 class="section-heading mb-4">
+                    {% if post2.type == 'Destination' %}
+                                          <a href="/writer/destination/{{post2.name}}"><span class="section-heading-upper">Discover {{ post2.location }}</span></a>
+                    {% elif post2.type == 'Attraction' %}
+                        <a href="/writer/region/{{post2.region_name}}"><span class="section-heading-upper">Discover {{ post2.region_name }}</span></a>
+                    {% endif %}
+                      <span class="section-heading-lower">{{ post2.name }}</span>
+                    </h2>
+                    {{ post2.content | safe}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+  {% endfor %}
+    {% for post2 in posts2 %}
+    <section class="page-section about-heading">
+          <div class="container">
+            <img class="img-fluid rounded about-heading-img mb-3 mb-lg-0" style="width: 1280px;
+    height: 640px;     border: 0;
+    max-width: 100%;
+    height: auto;" src="{{ post2.photo }}" alt="">
+            <div class="about-heading-content">
+              <div class="row">
+                <div class="col-xl-9 col-lg-10 mx-auto">
+                  <div class="bg-faded rounded p-5">
+                    <h2 class="section-heading mb-4">
+                    {% if post2.type == 'Destination' %}
+                                          <a href="/writer/destination/{{post2.name}}"><span class="section-heading-upper">Discover {{ post2.location }}</span></a>
+                    {% elif post2.type == 'Attraction' %}
+                        <a href="/writer/region/{{post2.region_name}}"><span class="section-heading-upper">Discover {{ post2.region_name }}</span></a>
+                    {% endif %}
+                      <span class="section-heading-lower">{{ post2.name }}</span>
+                    </h2>
+                    {{ post2.content | safe}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+  {% endfor %}
+
+{% endblock %}
+{% block custom_js %}
+<!-- CUSTOM JS -->
+{% endblock %}

@@ -1,4 +1,4 @@
-{% extends 'base/landing-page-base.html' %}
+{% extends 'base/landing-page-admin.html' %}
 {% block custom_css %}
 <!-- Custom CSS -->
     <script>
@@ -113,61 +113,106 @@
             </div>
         </div>
     </div>
-    {% for post in posts %}
-    <section class="page-section">
+    <header class="masthead text-white text-center" style="background: url({{post.photo}}) no-repeat center center;     background-size: cover;">
+      <div class="overlay" style="background-color:transparent;"></div>
       <div class="container">
-        <div class="product-item">
-          <div class="product-item-title d-flex">
-            <div class="bg-faded p-5 d-flex ml-auto rounded">
-              <h2 class="section-heading mb-0">
-                <span class="section-heading-upper"></span>
-                  <a href="/destination/{{post.name}}"><span class="section-heading-upper">Discover {{ post.location }}</span></a>
-                  <a href="/destination/{{post.name}}" style="color: initial; text-decoration: none !important;"><span class="section-heading-lower">{{ post.name }}</span></a>
-              </h2>
-            </div>
+        <div class="row">
+          <div class="col-xl-9 mx-auto">
+            <h1 class="mb-5" style="letter-spacing: 0.0322581em;
+    font-size: 62px;
+    line-height: 1.25em;
+    text-transform: none;
+    font-weight: 300;
+    font-style: normal;">Discover {{post.name}}</h1>
           </div>
-          <img class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" style="width:1280px;
-    height: 640px;     border: 0;
-    max-width: 100%;
-    height: auto;" src="{{ post.photo }}" alt="">
-          <div class="product-item-description d-flex mr-auto">
-            <div class="bg-faded p-5 rounded">
-              <div class="mb-0" style="    overflow: hidden;
-    height: 80px;">{{ post.content | safe}}</div>
-            </div>
+          <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+            <form>
+              <div class="form-row">
+              </div>
+            </form>
           </div>
         </div>
       </div>
-    </section>
+    </header>
+    {% if post %}
+    <section class="page-section about-heading">
+          <div class="container">
+            <div class="about-heading-content">
+              <div class="row">
+                <div class="col-xl-9 col-lg-10 mx-auto">
+                  <div class="bg-faded rounded p-5">
+                    <h2 class="section-heading mb-4">
+                    {% if post.type == 'Region' %}
+                      <span class="section-heading-upper">Region</span>
+                    {% elif post.type == 'Destination' %}
+                                          <a href="/admin/destination/{{post.name}}"><span class="section-heading-upper">Discover {{ post.location }}</span></a>
+                    {% elif post.type == 'Attraction' %}
+                        <a href="/admin/region/{{post.region_name}}"><span class="section-heading-upper">Discover {{ post.region_name }}</span></a>
+                    {% endif %}
+                    </h2>
+                    {{ post.content | safe}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+    {% endif %}
+    {% for post2 in posts3 %}
+    <section class="page-section about-heading">
+          <div class="container">
+            <img class="img-fluid rounded about-heading-img mb-3 mb-lg-0" style="width: 1280px;
+    height: 640px;     border: 0;
+    max-width: 100%;
+    height: auto;" src="{{ post2.photo }}" alt="">
+            <div class="about-heading-content">
+              <div class="row">
+                <div class="col-xl-9 col-lg-10 mx-auto">
+                  <div class="bg-faded rounded p-5">
+                    <h2 class="section-heading mb-4">
+                    {% if post2.type == 'Destination' %}
+                                          <a href="/admin/destination/{{post2.name}}"><span class="section-heading-upper">Discover {{ post2.location }}</span></a>
+                    {% elif post2.type == 'Attraction' %}
+                        <a href="/admin/region/{{post2.region_name}}"><span class="section-heading-upper">Discover {{ post2.region_name }}</span></a>
+                    {% endif %}
+                      <span class="section-heading-lower">{{ post2.name }}</span>
+                    </h2>
+                    {{ post2.content | safe}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
   {% endfor %}
-{% if count > 1 %}
-    <nav aria-label="Page navigation example" style="text-align:center; padding-left: 45%;">
-      <ul class="pagination">
-          <li class="page-item">
-              {% if count-1 != 0 %}
-              <a class="page-link" href="/destinations/{{count-1}}" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-              </a>
-              {% endif %}
-            </li>
-       {% for page in paginate %}
-            {% if page %}
-              <li class="page-item"><a class="page-link" href="/destinations/{{page}}">{{ page }}</a></li>
-              {% else %}
-              <li class="page-item"><a class="page-link">...</a></li>
-            {% endif %}
+    {% for post2 in posts2 %}
+    <section class="page-section about-heading">
+          <div class="container">
+            <img class="img-fluid rounded about-heading-img mb-3 mb-lg-0" style="width: 1280px;
+    height: 640px;     border: 0;
+    max-width: 100%;
+    height: auto;" src="{{ post2.photo }}" alt="">
+            <div class="about-heading-content">
+              <div class="row">
+                <div class="col-xl-9 col-lg-10 mx-auto">
+                  <div class="bg-faded rounded p-5">
+                    <h2 class="section-heading mb-4">
+                    {% if post2.type == 'Destination' %}
+                                          <a href="/admin/destination/{{post2.name}}"><span class="section-heading-upper">Discover {{ post2.location }}</span></a>
+                    {% elif post2.type == 'Attraction' %}
+                        <a href="/admin/region/{{post2.region_name}}"><span class="section-heading-upper">Discover {{ post2.region_name }}</span></a>
+                    {% endif %}
+                      <span class="section-heading-lower">{{ post2.name }}</span>
+                    </h2>
+                    {{ post2.content | safe}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+  {% endfor %}
 
-          {% endfor %}
-          <li class="page-item">
-          <a class="page-link" href="/destinations/{{count}}" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-            <span class="sr-only">Next</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-{% endif %}
 {% endblock %}
 {% block custom_js %}
 <!-- CUSTOM JS -->
